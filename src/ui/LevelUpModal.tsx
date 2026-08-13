@@ -9,11 +9,17 @@ const categoryCopy: Record<UpgradeOption['category'], string> = {
   recovery: 'FIELD RECOVERY',
 };
 
+function getUpgradeDisplayTitle(title: string) {
+  const compactTitle = title.replace(/\s+lv\.?\s*\d+\s*$/iu, '').trim();
+  return compactTitle || title;
+}
+
 function UpgradeCard({ option, index, onSelect }: {
   option: UpgradeOption;
   index: number;
   onSelect: (option: UpgradeOption) => void;
 }) {
+  const displayTitle = getUpgradeDisplayTitle(option.title);
   const categoryIcon = option.category === 'active'
     ? 'active'
     : option.category === 'recovery'
@@ -48,7 +54,12 @@ function UpgradeCard({ option, index, onSelect }: {
         {option.isNew && <span className="ui-upgrade-card__new">NEW</span>}
       </div>
       <div className="ui-upgrade-card__body">
-        <h3 data-testid={`upgrade-card-title-${index}`}>{option.title}</h3>
+        <h3
+          data-testid={`upgrade-card-title-${index}`}
+          data-full-title={option.title}
+        >
+          {displayTitle}
+        </h3>
         <div className="ui-upgrade-card__level">
           {option.category === 'recovery' ? (
             <><span>ONE-SHOT</span><UiIcon name="chevron" size={13} /><strong>INSTANT</strong></>
@@ -91,6 +102,7 @@ export function LevelUpModal({ level, options, rerollsRemaining, onSelect, onRer
       aria-labelledby="level-up-title"
       aria-describedby="level-up-description"
       data-testid="levelup-modal"
+      data-layout="responsive"
     >
       <div className="ui-overlay__scanlines" aria-hidden="true" />
       <section className="ui-levelup">

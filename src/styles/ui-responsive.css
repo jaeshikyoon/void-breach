@@ -100,6 +100,93 @@
   .ui-stage-select__footer { margin-top: 9px; padding-top: 7px; }
 }
 
+/* Low-height protocol picker for every pointer type. A 1404 x 648 viewport can
+   be either a desktop window or a mobile device reporting physical pixels. */
+@media (orientation: landscape) and (max-height: 700px) {
+  .ui-overlay--levelup {
+    align-items: center;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 10px 2vw;
+    scrollbar-gutter: stable;
+  }
+  .ui-levelup {
+    display: grid;
+    grid-template-rows: 45px 345px 42px;
+    width: min(1040px, 94vw);
+    max-height: calc(100dvh - 20px);
+    margin: auto;
+  }
+  .ui-levelup__header {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: none;
+    margin: 0 0 7px;
+  }
+  .ui-levelup__level { width: 45px; height: 38px; padding-left: 8px; font-size: 6px; }
+  .ui-levelup__level strong { font-size: 17px; }
+  .ui-levelup__header .ui-eyebrow,
+  .ui-levelup__header > div > p:last-child,
+  .ui-levelup__status { display: none; }
+  .ui-levelup__header h2 { margin: 0; font-size: 20px; line-height: 1.05; }
+  .ui-levelup__cards { min-height: 0; gap: 12px; }
+  .ui-overlay--levelup .ui-upgrade-card {
+    display: grid;
+    grid-template-rows: 30px 120px minmax(0, 1fr);
+    min-height: 0;
+    height: 345px;
+    max-height: 345px;
+  }
+  .ui-upgrade-card:hover,
+  .ui-upgrade-card:focus-visible { transform: translateY(-2px) scale(1.005); }
+  .ui-upgrade-card__header { min-height: 30px; padding: 0 9px 0 12px; }
+  .ui-upgrade-card__category { gap: 5px; font-size: 7px; }
+  .ui-upgrade-card__header kbd,
+  .ui-upgrade-card__rarity,
+  .ui-upgrade-card__new { display: none; }
+  .ui-upgrade-card__art { height: 120px; }
+  .ui-upgrade-card__fallback-icon { width: 78px; height: 78px; }
+  .ui-upgrade-card__fallback-icon svg { width: 42px; height: 42px; }
+  .ui-upgrade-card__body {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    padding: 11px 14px 12px;
+  }
+  .ui-upgrade-card__body h3 { overflow: hidden; margin: 0; font-size: 17px; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-upgrade-card__level { gap: 5px; margin-top: 5px; font-size: 9px; }
+  .ui-upgrade-card[data-is-new='true'] .ui-upgrade-card__level > span:first-child,
+  .ui-upgrade-card[data-is-new='true'] .ui-upgrade-card__level > svg { display: none; }
+  .ui-upgrade-card[data-upgrade-category='recovery'] .ui-upgrade-card__level { display: none; }
+  .ui-upgrade-card__description,
+  .ui-upgrade-card__current,
+  .ui-upgrade-card__select { display: none; }
+  .ui-upgrade-card__description.is-mobile-essential {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 0;
+    margin: 7px 0 0;
+    color: #8ca3ae;
+    font-size: 9px;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .ui-upgrade-card__effect {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    padding: 9px 10px;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .ui-upgrade-card__effect span { display: none; }
+  .ui-levelup__footer { align-self: end; min-height: 38px; margin-top: 4px; }
+  .ui-levelup__footer > p { display: none; }
+  .ui-reroll-button { min-height: 38px; font-size: 9px; }
+}
+
 /* Mid-size desktop widths need two rows even when their height is just above
    the compact-landscape breakpoint (for example 1366 x 768). */
 @media (hover: hover) and (pointer: fine) and (max-width: 1600px) {
@@ -331,7 +418,9 @@
   }
 
   .ui-levelup {
+    display: block;
     width: min(790px, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 20px));
+    max-height: none;
     margin: auto;
   }
   .ui-levelup__header { grid-template-columns: 46px minmax(0, 1fr); gap: 8px; margin-bottom: 5px; }
@@ -342,7 +431,13 @@
   .ui-levelup__header > div > p:last-child,
   .ui-levelup__status { display: none; }
   .ui-levelup__cards { gap: 8px; }
-  .ui-upgrade-card { min-height: 0; height: 230px; }
+  .ui-overlay--levelup .ui-upgrade-card {
+    display: flex;
+    grid-template-rows: none;
+    min-height: 0;
+    height: 230px;
+    max-height: none;
+  }
   .ui-upgrade-card:hover,
   .ui-upgrade-card:focus-visible { transform: translateY(-2px); }
   .ui-upgrade-card__header { position: absolute; z-index: 5; top: 7px; left: 7px; min-height: 0; padding: 0; border: 0; background: transparent; }
