@@ -5,49 +5,23 @@ import type { RuntimeAssetPaths } from './types';
 const publicAsset = (path: string): string => assetUrl(path);
 
 export const DEFAULT_RUNTIME_ASSETS: RuntimeAssetPaths = {
-  arena: [publicAsset('assets/game/arena.png'), publicAsset('assets/game/arena-industrial.png')],
+  arena: [publicAsset('assets/game/arena.webp')],
   arenaFronts: [
-    [publicAsset('assets/game/arena.png'), publicAsset('assets/game/arena-industrial.png')],
-    [publicAsset('assets/game/arena-plague.jpg'), publicAsset('assets/game/arena-plague.png')],
-    [publicAsset('assets/game/arena-cryo.jpg'), publicAsset('assets/game/arena-cryo.png')],
-    [publicAsset('assets/game/arena-void.jpg'), publicAsset('assets/game/arena-void.png')],
-    [publicAsset('assets/game/arena-rift.jpg'), publicAsset('assets/game/arena-rift.png')],
+    [publicAsset('assets/game/arena.webp')],
+    [publicAsset('assets/game/arena-plague.webp')],
+    [publicAsset('assets/game/arena-cryo.webp')],
+    [publicAsset('assets/game/arena-void.webp')],
+    [publicAsset('assets/game/arena-rift.webp')],
   ],
-  playerSheet: [
-    publicAsset('assets/game/player-sheet.png'),
-    publicAsset('assets/game/player_sheet.png'),
-    publicAsset('assets/game/player.png'),
-  ],
-  enemySheet: [
-    publicAsset('assets/game/enemies-sheet.png'),
-    publicAsset('assets/game/enemy-sheet.png'),
-    publicAsset('assets/game/enemies.png'),
-  ],
-  enemyExpansionSheet: [publicAsset('assets/game/enemies-expansion.png')],
-  bossSheet: [
-    publicAsset('assets/game/bosses-sheet.png'),
-    publicAsset('assets/game/boss.png'),
-    publicAsset('assets/game/boss-sheet.png'),
-  ],
-  projectile: [
-    publicAsset('assets/game/props/bullet.png'),
-    publicAsset('assets/game/projectile.png'),
-    publicAsset('assets/game/bullet.png'),
-  ],
-  experience: [
-    publicAsset('assets/game/props/xp-crystal.png'),
-    publicAsset('assets/game/xp-crystal.png'),
-    publicAsset('assets/game/experience.png'),
-  ],
-  healthPickup: [
-    publicAsset('assets/game/health-pickup.png'),
-    publicAsset('assets/game/props/health-pickup.png'),
-  ],
-  vfxAtlas: [publicAsset('assets/game/vfx-atlas.png'), publicAsset('assets/game/vfx_atlas.png')],
-  skillVfxAtlas: [
-    publicAsset('assets/game/skill-vfx-atlas-v2-clean.png'),
-    publicAsset('assets/game/skill-vfx-atlas-v2.png'),
-  ],
+  playerSheet: [publicAsset('assets/game/player-sheet.webp')],
+  enemySheet: [publicAsset('assets/game/enemies-sheet.webp')],
+  enemyExpansionSheet: [publicAsset('assets/game/enemies-expansion.webp')],
+  bossSheet: [publicAsset('assets/game/bosses-sheet.webp'), publicAsset('assets/game/boss.webp')],
+  projectile: [publicAsset('assets/game/props/bullet.webp')],
+  experience: [publicAsset('assets/game/props/xp-crystal.webp')],
+  healthPickup: [publicAsset('assets/game/health-pickup.webp')],
+  vfxAtlas: [publicAsset('assets/game/vfx-atlas.webp')],
+  skillVfxAtlas: [publicAsset('assets/game/skill-vfx-atlas-v2-clean.webp')],
 };
 
 export interface RuntimeTextures {
@@ -120,12 +94,12 @@ export async function loadRuntimeTextures(
     loadFirst(paths.healthPickup ?? []),
     loadFirst(paths.vfxAtlas),
     loadFirst(paths.skillVfxAtlas ?? []),
-    loadFirst([publicAsset('assets/game/props/missile.png')]),
-    loadFirst([publicAsset('assets/game/props/enemy-projectile.png')]),
-    loadFirst([publicAsset('assets/game/props/elite-crystal.png')]),
-    loadFirst([publicAsset('assets/game/props/landmine.png')]),
-    loadFirst([publicAsset('assets/game/props/turret.png')]),
-    loadFirst([publicAsset('assets/game/props/drone.png')]),
+    loadFirst([publicAsset('assets/game/props/missile.webp')]),
+    loadFirst([publicAsset('assets/game/props/enemy-projectile.webp')]),
+    loadFirst([publicAsset('assets/game/props/elite-crystal.webp')]),
+    loadFirst([publicAsset('assets/game/props/landmine.webp')]),
+    loadFirst([publicAsset('assets/game/props/turret.webp')]),
+    loadFirst([publicAsset('assets/game/props/drone.webp')]),
   ]);
 
   const owned: Texture[] = [];

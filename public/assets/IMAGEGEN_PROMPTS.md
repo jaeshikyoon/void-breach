@@ -80,7 +80,7 @@ Create an additive VFX atlas for a dark sci-fi isometric action game, exactly 4 
 
 ### 스킬 전용 VFX 보조 아틀라스 v2
 
-- 최종 파일: `public/assets/game/skill-vfx-atlas-v2-clean.png` (`v2.png`은 원본 생성본)
+- 최종 파일: `public/assets/game/skill-vfx-atlas-v2-clean.webp` (배포 최적화 WebP)
 - 셀 순서: 미사일 폭발 / 냉기 파편 / 화상 사망 폭발 / 체인 번개 강화 / 지뢰 연쇄 / 칼날 충격파 / 포탑 배치 / 드론 소환
 
 ```text

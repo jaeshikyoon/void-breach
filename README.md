@@ -101,19 +101,19 @@ src/
 
 실제 게임 화면에 사용되는 래스터 자산은 Codex 내장 Imagegen으로 제작했습니다.
 
-- `public/assets/game/arena.png`: STAGE 1–4 산업 요새 전투장
-- `public/assets/game/arena-plague.jpg`: STAGE 5–8 독성 감염 전투장
-- `public/assets/game/arena-cryo.jpg`: STAGE 9–12 빙결 연구시설 전투장
-- `public/assets/game/arena-void.jpg`: STAGE 13–16 공허 기술 전투장
-- `public/assets/game/arena-rift.jpg`: STAGE 17–20 균열 핵심부 전투장
-- `public/assets/game/player-sheet.png`: 플레이어 8방향 4×2 시트
-- `public/assets/game/enemies-sheet.png`: 적 12종 4×3 아틀라스
-- `public/assets/game/boss.png`: 최종 보스
-- `public/assets/game/vfx-atlas.png`: 전투 이펙트 4×2 아틀라스
+- `public/assets/game/arena.webp`: STAGE 1–4 산업 요새 전투장
+- `public/assets/game/arena-plague.webp`: STAGE 5–8 독성 감염 전투장
+- `public/assets/game/arena-cryo.webp`: STAGE 9–12 빙결 연구시설 전투장
+- `public/assets/game/arena-void.webp`: STAGE 13–16 공허 기술 전투장
+- `public/assets/game/arena-rift.webp`: STAGE 17–20 균열 핵심부 전투장
+- `public/assets/game/player-sheet.webp`: 플레이어 8방향 4×2 시트
+- `public/assets/game/enemies-sheet.webp`: 적 12종 4×3 아틀라스
+- `public/assets/game/boss.webp`: 최종 보스
+- `public/assets/game/vfx-atlas.webp`: 전투 이펙트 4×2 아틀라스
 - `public/assets/game/props/`: 탄환, 미사일, 적 투사체, 경험치 결정, 지뢰, 터렛, 드론
 - `public/assets/ui/frames/`: HUD 패널, 버튼, 미니맵, 조이스틱 프레임
 - `public/assets/ui/icons/`: 액티브 스킬 아이콘 10종
 - `public/assets/ui/upgrades/`: 패시브 강화 아이콘 16종(폭발탄은 기존 저장 호환용이며 신규 선택에서 제외)
-- `public/assets/ui/menu-operator.png`, `result-backdrop.png`: 시작·결과 화면 아트
+- `public/assets/ui/menu-operator.webp`, `result-backdrop.webp`: 시작·결과 화면 아트
 
 재현용 최종 프롬프트와 후처리 기준은 [`public/assets/IMAGEGEN_PROMPTS.md`](public/assets/IMAGEGEN_PROMPTS.md)에 정리되어 있습니다.
