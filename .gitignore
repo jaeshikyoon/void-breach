@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.vite-*.log
+.chrome-*.log
+.chromeqa/
+qa-*.png
+qa-*.html
+test-results/
+playwright-report/
+public/assets/**/*-key.png

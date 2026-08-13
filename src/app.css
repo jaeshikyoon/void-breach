@@ -1,0 +1,69 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #03070b;
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+button,
+canvas {
+  user-select: none;
+}
+
+.game-app,
+.game-canvas-host {
+  position: fixed;
+  inset: 0;
+}
+
+.game-canvas-host {
+  z-index: 1;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #12232d, #03070b 72%);
+}
+
+.game-canvas-host canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.game-loading,
+.game-error {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #a9f3ff;
+  background: #03070b;
+  font: 700 13px/1.5 "Segoe UI", sans-serif;
+  letter-spacing: .2em;
+}
+
+.game-loading::before {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  content: '';
+  border: 2px solid rgba(57, 217, 255, .16);
+  border-top-color: #39d9ff;
+  border-radius: 50%;
+  transform: translateY(-42px);
+  animation: game-spin .8s linear infinite;
+}
+
+.game-error {
+  padding: 30px;
+  color: #ff8793;
+  text-align: center;
+  letter-spacing: .06em;
+}
+
+@keyframes game-spin { to { transform: translateY(-42px) rotate(360deg); } }
