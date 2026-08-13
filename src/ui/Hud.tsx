@@ -59,7 +59,15 @@ export function DeploymentCounter({
   const danger = deploymentRatio >= 0.85;
 
   return (
-    <section className={`ui-deployment ${danger ? 'ui-deployment--danger' : ''}`} aria-label="전투 진행 상황">
+    <section
+      className={`ui-deployment ${danger ? 'ui-deployment--danger' : ''}`}
+      aria-label={`전투 진행 상황, 투입 ${progress.deployed} / ${progress.totalDeployments}, 생존 ${progress.alive}, 처치 ${progress.kills}${progress.elitesAlive ? `, 정예 ${progress.elitesAlive}` : ''}`}
+      data-testid="deployment-hud"
+      data-deployed={progress.deployed}
+      data-total={progress.totalDeployments}
+      data-alive={progress.alive}
+      data-kills={progress.kills}
+    >
       <div className="ui-deployment__header">
         <span>MONSTERS DEPLOYED</span>
         <span className="ui-deployment__sector">
@@ -294,7 +302,7 @@ export function GameHud({
   return (
     <div className={`ui-hud${boss ? ' ui-hud--boss-active' : ''}`} aria-label="게임 HUD">
       <div className="ui-hud__top-left"><VitalCluster vitals={vitals} /></div>
-      <div className="ui-hud__top-center">
+      <div className="ui-hud__top-center" data-testid="hud-top-center">
         <DeploymentCounter
           progress={progress}
           currentStage={currentStage}

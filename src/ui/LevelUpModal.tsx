@@ -27,6 +27,10 @@ function UpgradeCard({ option, index, onSelect }: {
       autoFocus={index === 0}
       onClick={() => onSelect(option)}
       aria-label={`${option.title}, ${option.nextEffect} 선택`}
+      data-testid={`upgrade-card-${index}`}
+      data-option-id={option.id}
+      data-upgrade-category={option.category}
+      data-is-new={option.isNew ? 'true' : 'false'}
     >
       <span className="ui-upgrade-card__corner ui-upgrade-card__corner--tl" aria-hidden="true" />
       <span className="ui-upgrade-card__corner ui-upgrade-card__corner--br" aria-hidden="true" />
@@ -34,7 +38,7 @@ function UpgradeCard({ option, index, onSelect }: {
         <span className="ui-upgrade-card__category"><UiIcon name={categoryIcon} size={14} />{categoryCopy[option.category]}</span>
         <kbd>{index + 1}</kbd>
       </header>
-      <div className="ui-upgrade-card__art">
+      <div className="ui-upgrade-card__art" data-testid={`upgrade-card-art-${index}`}>
         {option.iconSrc ? (
           <img src={option.iconSrc} alt="" draggable={false} />
         ) : (
@@ -44,7 +48,7 @@ function UpgradeCard({ option, index, onSelect }: {
         {option.isNew && <span className="ui-upgrade-card__new">NEW</span>}
       </div>
       <div className="ui-upgrade-card__body">
-        <h3>{option.title}</h3>
+        <h3 data-testid={`upgrade-card-title-${index}`}>{option.title}</h3>
         <div className="ui-upgrade-card__level">
           {option.category === 'recovery' ? (
             <><span>ONE-SHOT</span><UiIcon name="chevron" size={13} /><strong>INSTANT</strong></>
@@ -54,13 +58,15 @@ function UpgradeCard({ option, index, onSelect }: {
             <><span>LV.{option.currentLevel}</span><UiIcon name="chevron" size={13} /><strong>LV.{option.nextLevel}</strong></>
           )}
         </div>
-        <p>{option.description}</p>
+        <p className={`ui-upgrade-card__description${option.isNew && option.category === 'active' ? ' is-mobile-essential' : ''}`}>
+          {option.description}
+        </p>
         {option.currentEffect && (
           <div className="ui-upgrade-card__current"><span>CURRENT</span>{option.currentEffect}</div>
         )}
-        <div className="ui-upgrade-card__effect"><span>UPGRADE EFFECT</span>{option.nextEffect}</div>
+        <div className="ui-upgrade-card__effect" data-testid={`upgrade-card-effect-${index}`}><span>UPGRADE EFFECT</span>{option.nextEffect}</div>
       </div>
-      <span className="ui-upgrade-card__select">SELECT PROTOCOL <UiIcon name="chevron" size={14} /></span>
+      <span className="ui-upgrade-card__select" data-testid={`upgrade-card-select-${index}`}>SELECT PROTOCOL <UiIcon name="chevron" size={14} /></span>
     </button>
   );
 }
@@ -84,6 +90,7 @@ export function LevelUpModal({ level, options, rerollsRemaining, onSelect, onRer
       aria-modal="true"
       aria-labelledby="level-up-title"
       aria-describedby="level-up-description"
+      data-testid="levelup-modal"
     >
       <div className="ui-overlay__scanlines" aria-hidden="true" />
       <section className="ui-levelup">
@@ -109,6 +116,7 @@ export function LevelUpModal({ level, options, rerollsRemaining, onSelect, onRer
             type="button"
             onClick={onReroll}
             disabled={rerollsRemaining <= 0}
+            data-testid="levelup-reroll"
           >
             <UiIcon name="refresh" size={18} />
             후보 재탐색
