@@ -321,6 +321,101 @@
   .ui-upgrade-card { min-height: min(57vh, 440px); }
 }
 
+/* Touch devices can report a desktop-like 1404 x 648 CSS viewport. Keep the
+   combat chrome compact whenever mobile controls are active, without changing
+   the fine-pointer desktop HUD or the modal layout at this height. */
+@media (hover: none) and (orientation: landscape) and (max-height: 700px),
+       (pointer: coarse) and (orientation: landscape) and (max-height: 700px) {
+  .ui-hud__top-left {
+    top: calc(env(safe-area-inset-top, 0px) + 8px);
+    left: calc(env(safe-area-inset-left, 0px) + 8px);
+    width: min(184px, 25vw);
+  }
+  .ui-hud__top-center {
+    top: calc(env(safe-area-inset-top, 0px) + 6px);
+    width: min(200px, 30vw);
+  }
+  .ui-hud__top-right {
+    top: calc(env(safe-area-inset-top, 0px) + 8px);
+    right: calc(env(safe-area-inset-right, 0px) + 8px);
+    gap: 6px;
+  }
+  .ui-hud__xp {
+    top: calc(env(safe-area-inset-top, 0px) + 78px);
+    left: calc(env(safe-area-inset-left, 0px) + 8px);
+    width: min(184px, 23vw);
+  }
+  .ui-hud__boss { top: 76px; width: min(46vw, 390px); }
+  .ui-hud--boss-active .ui-hud__xp { display: none; }
+
+  .ui-vitals { gap: 3px; }
+  .ui-meter { height: 31px; padding: 3px 8px 4px 10px; }
+  .ui-meter__meta { height: 14px; }
+  .ui-meter__meta strong { font-size: 10px; }
+  .ui-meter__meta strong small { font-size: 7px; }
+  .ui-meter__label { gap: 0; font-size: 0; }
+  .ui-meter__label svg { width: 11px; height: 11px; }
+  .ui-meter__track { height: 5px; }
+
+  .ui-deployment {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 23px 5px 13px;
+    min-height: 0;
+    height: 46px;
+    padding: 3px 8px 4px;
+    clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 8px);
+  }
+  .ui-deployment::before,
+  .ui-deployment::after { width: 25%; }
+  .ui-deployment__header { display: none; }
+  .ui-deployment__numbers { grid-column: 1 / -1; grid-row: 1; justify-content: center; margin: 0; }
+  .ui-deployment__numbers strong { font-size: 18px; }
+  .ui-deployment__numbers span { margin-left: 4px; font-size: 8px; }
+  .ui-deployment__track { grid-column: 1 / -1; grid-row: 2; height: 3px; margin: 0; }
+  .ui-deployment__footer { grid-column: 1 / -1; grid-row: 3; align-self: end; justify-content: center; gap: 12px; font-size: 8px; letter-spacing: .04em; }
+  .ui-deployment__footer > span { gap: 3px; }
+  .ui-deployment__footer > span:nth-child(2) { display: none; }
+  .ui-deployment__footer strong { font-size: 9px; }
+  .ui-alive-pulse { width: 4px; height: 4px; }
+
+  .ui-xp { height: 30px; }
+  .ui-level-badge { min-width: 45px; height: 30px; padding: 4px 8px; }
+  .ui-level-badge small { font-size: 6px; }
+  .ui-level-badge strong { font-size: 14px; }
+  .ui-xp__body { height: 27px; padding: 3px 7px 3px 9px; }
+  .ui-xp__labels { height: 10px; }
+  .ui-xp__labels > span { display: none; }
+  .ui-xp__labels strong { margin-left: auto; font-size: 7px; }
+  .ui-xp__track { height: 4px; margin-top: 3px; }
+
+  .ui-encounter-info {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .ui-threat-chip { display: none; }
+  .ui-current-stage { height: 32px; padding: 5px 8px; }
+  .ui-current-stage > span { display: none; }
+  .ui-current-stage strong { font-size: 15px; }
+  .ui-icon-button--pause { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+
+  .ui-boss-bar { min-height: 40px; padding: 5px 11px 6px; }
+  .ui-boss-bar__identity span { display: none; }
+  .ui-boss-bar__identity strong { font-size: 10px; }
+  .ui-boss-bar__phase { font-size: 6px; }
+  .ui-boss-bar__phase em { font-size: 7px; }
+  .ui-boss-bar__track { height: 6px; margin-top: 3px; }
+  .ui-boss-bar__numbers { display: none; }
+}
+
 @media (hover: none) and (orientation: landscape) and (max-height: 600px) {
   .ui-start-screen__content {
     width: min(93vw, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 20px));
