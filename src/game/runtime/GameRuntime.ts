@@ -392,6 +392,7 @@ export class GameRuntime {
   private pendingDash = false;
   private pendingSkills: Array<ActiveSkillId | number> = [];
   private virtualAttack = false;
+  private virtualAimDirection: Vec2 | null = null;
   private lastAimDirection: Vec2 = { x: 1, y: 0 };
   private lastPointer: Vec2 = { x: 0, y: 0 };
   private pointerAimActive = false;
@@ -542,6 +543,7 @@ export class GameRuntime {
       if (this.state.can('PAUSE')) this.state.dispatch('PAUSE');
       this.status = 'paused';
       this.virtualAttack = false;
+      this.virtualAimDirection = null;
       this.input?.setVirtualAction('attack', false, 'runtime-ui');
       this.input?.setVirtualMovement({ x: 0, y: 0 });
       this.pendingDash = false;
@@ -563,6 +565,25 @@ export class GameRuntime {
   setVirtualAttack(active: boolean): void {
     this.virtualAttack = active;
     this.input?.setVirtualAction('attack', active, 'runtime-ui');
+  }
+
+  setVirtualAimDirection(direction: Vec2 | null): void {
+    if (
+      direction === null ||
+      !Number.isFinite(direction.x) ||
+      !Number.isFinite(direction.y) ||
+      lengthSquared(direction) < 0.01
+    ) {
+      this.virtualAimDirection = null;
+      this.pointerAimActive = false;
+      return;
+    }
+    this.virtualAimDirection = normalize(direction);
+    this.pointerAimActive = false;
+    this.lastAimDirection = this.virtualAimDirection;
+    if (this.player) {
+      this.player.facing = Math.atan2(this.lastAimDirection.y, this.lastAimDirection.x);
+    }
   }
 
   unlockAudio(): Promise<boolean> {
@@ -889,6 +910,7 @@ export class GameRuntime {
     this.pendingDash = false;
     this.pendingSkills = [];
     this.virtualAttack = false;
+    this.virtualAimDirection = null;
     this.lastAimDirection = { x: 1, y: 0 };
     this.pointerAimActive = false;
     this.pauseInputGuard = 0;
@@ -1021,7 +1043,9 @@ export class GameRuntime {
     player.position.y = clamp(player.position.y + player.velocity.y * delta, 46, this.worldHeight - 46);
 
     const pointer = input.pointer;
-    if (pointer.x !== this.lastPointer.x || pointer.y !== this.lastPointer.y) {
+    if (this.virtualAimDirection) {
+      this.lastAimDirection = this.virtualAimDirection;
+    } else if (pointer.x !== this.lastPointer.x || pointer.y !== this.lastPointer.y) {
       const worldPointer = this.screenToWorld(pointer);
       const aim = normalize({ x: worldPointer.x - player.position.x, y: worldPointer.y - player.position.y });
       if (lengthSquared(aim) > 0.1) this.lastAimDirection = aim;
@@ -1056,7 +1080,7 @@ export class GameRuntime {
     const baseDamage = 12 * (1 + this.passiveLevel('reinforcedRounds') * 0.15);
     const criticalChance = 0.05 + this.passiveLevel('precisionSight') * 0.075;
     const largeCaliber = this.passiveLevel('largeCaliber');
-    if (this.virtualAttack && !this.pointerAimActive) {
+    if (this.virtualAttack && !this.virtualAimDirection) {
       if (this.boss?.alive) {
         this.lastAimDirection = normalize(subtract(this.boss.position, player.position));
       } else {
@@ -3084,7 +3108,9 @@ export class GameRuntime {
     const definition = ACTIVE_SKILLS[skillId];
     const levelDefinition = definition.levels[level - 1] ?? definition.levels[0];
     if (!levelDefinition) return false;
-    const worldPointer = this.pointerAimActive
+    const worldPointer = this.virtualAimDirection
+      ? add(player.position, scale(this.virtualAimDirection, 360))
+      : this.pointerAimActive
       ? this.screenToWorld(this.input?.pointer ?? this.lastPointer)
       : add(player.position, scale(this.lastAimDirection, 360));
     const rawTarget = clampPointToRange(player.position, worldPointer, 540);
@@ -4094,7 +4120,9 @@ export class GameRuntime {
     if (!app || !player) return;
     const viewWidth = app.renderer.screen.width;
     const viewHeight = app.renderer.screen.height;
-    const cameraScale = clamp(Math.min(viewWidth / 1_280, viewHeight / 720), 0.72, 1.18);
+    const compactLandscape = viewWidth > viewHeight && viewHeight <= 600;
+    const minimumScale = compactLandscape ? 0.54 : 0.72;
+    const cameraScale = clamp(Math.min(viewWidth / 1_280, viewHeight / 720), minimumScale, 1.18);
     this.world.scale.set(cameraScale);
     const scaledWidth = this.worldWidth * cameraScale;
     const scaledHeight = this.worldHeight * cameraScale;

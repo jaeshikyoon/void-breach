@@ -292,7 +292,7 @@ export function GameHud({
   const warningName = bossWarningName ?? currentBossName ?? boss?.name ?? 'FINAL BOSS';
 
   return (
-    <div className="ui-hud" aria-label="게임 HUD">
+    <div className={`ui-hud${boss ? ' ui-hud--boss-active' : ''}`} aria-label="게임 HUD">
       <div className="ui-hud__top-left"><VitalCluster vitals={vitals} /></div>
       <div className="ui-hud__top-center">
         <DeploymentCounter

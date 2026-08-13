@@ -127,6 +127,7 @@ export function GameUi(props: GameUiProps) {
           onMove={props.onMove}
           onMoveEnd={props.onMoveEnd}
           onAttackChange={props.onAttackChange}
+          onAttackAim={props.onAttackAim}
           onDodge={props.onDodge}
           onSkill={props.onSkill}
         />

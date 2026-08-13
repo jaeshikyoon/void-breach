@@ -75,6 +75,23 @@ test.describe('desktop combat shell', () => {
     await expect(pauseDialog).toBeHidden();
     expect(pageErrors).toEqual([]);
   });
+
+  test('abandons a paused operation and stays on the home screen', async ({ page }) => {
+    const pageErrors = watchPageErrors(page);
+    await startAndAssertFirstDeployment(page);
+
+    await page.keyboard.press('Escape');
+    const pauseDialog = page.getByRole('dialog', { name: 'PAUSED' });
+    await expect(pauseDialog).toBeVisible();
+    await pauseDialog.getByRole('button', { name: /작전 포기/i }).click();
+
+    await expect(page.getByTestId('start-game')).toBeVisible();
+    await expect(pauseDialog).toBeHidden();
+    await page.waitForTimeout(250);
+    await expect(page.getByTestId('start-game')).toBeVisible();
+    await expect(page.getByTestId('mobile-controls')).toBeHidden();
+    expect(pageErrors).toEqual([]);
+  });
 });
 
 test.describe('mobile landscape controls', () => {

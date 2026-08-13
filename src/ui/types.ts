@@ -196,6 +196,8 @@ export interface MobileControlsProps {
   onMove: (vector: MoveVector) => void;
   onMoveEnd: () => void;
   onAttackChange: (pressed: boolean) => void;
+  /** Null keeps/restores automatic targeting; a vector is a normalized manual aim direction. */
+  onAttackAim: (vector: MoveVector | null) => void;
   onDodge: () => void;
   onSkill: (skillId: ActiveSkillId) => void;
 }
@@ -236,6 +238,8 @@ export interface GameUiProps {
   onMove: (vector: MoveVector) => void;
   onMoveEnd: () => void;
   onAttackChange: (pressed: boolean) => void;
+  /** Null keeps/restores automatic targeting; a vector is a normalized manual aim direction. */
+  onAttackAim: (vector: MoveVector | null) => void;
   onDodge: () => void;
   onSkill: (skillId: ActiveSkillId) => void;
 }

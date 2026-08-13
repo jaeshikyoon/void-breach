@@ -8,6 +8,16 @@ body,
   background: #03070b;
 }
 
+@supports (height: 100dvh) {
+  html,
+  body,
+  #root,
+  .game-app,
+  .game-canvas-host {
+    height: 100dvh;
+  }
+}
+
 body {
   overscroll-behavior: none;
 }
@@ -21,6 +31,7 @@ canvas {
 .game-canvas-host {
   position: fixed;
   inset: 0;
+  width: 100vw;
 }
 
 .game-canvas-host {

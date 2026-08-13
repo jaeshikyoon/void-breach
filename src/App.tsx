@@ -108,6 +108,7 @@ export function App() {
     const releaseVirtualInput = () => {
       runtimeRef.current?.setVirtualMovement({ x: 0, y: 0 });
       runtimeRef.current?.setVirtualAttack(false);
+      runtimeRef.current?.setVirtualAimDirection(null);
     };
     const onVisibilityChange = () => {
       if (!document.hidden) return;
@@ -125,6 +126,7 @@ export function App() {
     if (!runtime || (!document.hidden && !isPortrait)) return;
     runtime.setVirtualMovement({ x: 0, y: 0 });
     runtime.setVirtualAttack(false);
+    runtime.setVirtualAimDirection(null);
     if (snapshot.status === 'playing') runtime.pause();
   }, [isPortrait, snapshot.status]);
 
@@ -132,6 +134,7 @@ export function App() {
     if (screen === 'playing') return;
     runtimeRef.current?.setVirtualMovement({ x: 0, y: 0 });
     runtimeRef.current?.setVirtualAttack(false);
+    runtimeRef.current?.setVirtualAimDirection(null);
   }, [screen]);
 
   const handleSnapshot = useCallback((next: RuntimeSnapshot) => {
@@ -368,6 +371,7 @@ export function App() {
         onMove={(vector) => runtimeRef.current?.setVirtualMovement(vector)}
         onMoveEnd={() => runtimeRef.current?.setVirtualMovement({ x: 0, y: 0 })}
         onAttackChange={(pressed) => runtimeRef.current?.setVirtualAttack(pressed)}
+        onAttackAim={(direction) => runtimeRef.current?.setVirtualAimDirection(direction)}
         onDodge={() => runtimeRef.current?.triggerDash()}
         onSkill={(skillId) => runtimeRef.current?.triggerSkill(skillId)}
       />
