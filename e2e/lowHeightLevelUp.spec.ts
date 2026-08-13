@@ -31,11 +31,11 @@ async function visibleRect(locator: Locator): Promise<ElementRect> {
   return box!;
 }
 
-function expectRectContained(child: ElementRect, parent: ElementRect) {
-  expect(child.x).toBeGreaterThanOrEqual(parent.x - 0.5);
-  expect(child.y).toBeGreaterThanOrEqual(parent.y - 0.5);
-  expect(child.x + child.width).toBeLessThanOrEqual(parent.x + parent.width + 0.5);
-  expect(child.y + child.height).toBeLessThanOrEqual(parent.y + parent.height + 0.5);
+function expectRectContained(child: ElementRect, parent: ElementRect, tolerance = 0.5) {
+  expect(child.x).toBeGreaterThanOrEqual(parent.x - tolerance);
+  expect(child.y).toBeGreaterThanOrEqual(parent.y - tolerance);
+  expect(child.x + child.width).toBeLessThanOrEqual(parent.x + parent.width + tolerance);
+  expect(child.y + child.height).toBeLessThanOrEqual(parent.y + parent.height + tolerance);
 }
 
 function overlapArea(first: ElementRect, second: ElementRect): number {
@@ -164,7 +164,6 @@ for (const viewport of LOW_HEIGHT_DESKTOPS) {
       const cardBoxes: ElementRect[] = [];
       const titles: string[] = [];
       const optionIds: string[] = [];
-      let essentialDescriptionCount = 0;
 
       for (let index = 0; index < 3; index += 1) {
         const card = page.getByTestId(`upgrade-card-${index}`);
@@ -183,19 +182,54 @@ for (const viewport of LOW_HEIGHT_DESKTOPS) {
         const level = card.locator('.ui-upgrade-card__level');
         const effect = page.getByTestId(`upgrade-card-effect-${index}`);
         const category = card.locator('.ui-upgrade-card__category');
-        for (const child of [art, title, level, effect, category]) {
-          expectRectContained(await visibleRect(child), cardBox);
+        const body = card.locator('.ui-upgrade-card__body');
+        for (const child of [art, category, body]) {
+          // Borders and fractional card widths can differ by one device pixel.
+          expectRectContained(await visibleRect(child), cardBox, 1.5);
         }
         const artBox = await visibleRect(art);
-        expect(artBox.height).toBeGreaterThanOrEqual(119.5);
-        expect(artBox.height).toBeLessThanOrEqual(120.5);
+        expect(artBox.height).toBeGreaterThanOrEqual(238.5);
+        expect(artBox.height / cardBox.height).toBeGreaterThanOrEqual(0.69);
+        const bodyBox = await visibleRect(body);
+        expect(bodyBox.height).toBeLessThanOrEqual(75.5);
 
         const image = art.locator('img');
         await expect(image).toHaveCount(1);
         await expect(image).toBeVisible();
-        expect(await image.evaluate((element: HTMLImageElement) => (
-          element.complete && element.naturalWidth > 0 && element.naturalHeight > 0
-        ))).toBe(true);
+        const imageBox = await visibleRect(image);
+        expectRectContained(imageBox, artBox);
+        expect(imageBox.height).toBeGreaterThanOrEqual(artBox.height - 1.5);
+        const imageContract = await image.evaluate((element: HTMLImageElement) => ({
+          loaded: element.complete && element.naturalWidth > 0 && element.naturalHeight > 0,
+          naturalWidth: element.naturalWidth,
+          naturalHeight: element.naturalHeight,
+          objectFit: getComputedStyle(element).objectFit,
+        }));
+        expect(imageContract.loaded).toBe(true);
+        expect(Math.abs(imageContract.naturalWidth - imageContract.naturalHeight)).toBeLessThanOrEqual(1);
+        expect(imageContract.objectFit).toBe('contain');
+
+        const titleBox = await visibleRect(title);
+        const levelBox = await visibleRect(level);
+        const effectBox = await visibleRect(effect);
+        for (const childBox of [titleBox, levelBox, effectBox]) {
+          expectRectContained(childBox, bodyBox);
+        }
+        const topRowBottom = Math.max(
+          titleBox.y + titleBox.height,
+          levelBox.y + levelBox.height,
+        );
+        expect(effectBox.y - topRowBottom).toBeLessThanOrEqual(12);
+        expect(bodyBox.y + bodyBox.height - (effectBox.y + effectBox.height))
+          .toBeLessThanOrEqual(12.5);
+        const bodyOverflow = await body.evaluate((element) => ({
+          clientHeight: element.clientHeight,
+          scrollHeight: element.scrollHeight,
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+        }));
+        expect(bodyOverflow.scrollHeight).toBeLessThanOrEqual(bodyOverflow.clientHeight + 1);
+        expect(bodyOverflow.scrollWidth).toBeLessThanOrEqual(bodyOverflow.clientWidth + 1);
 
         const titleText = (await title.innerText()).trim();
         const fullTitle = await title.getAttribute('data-full-title');
@@ -213,17 +247,8 @@ for (const viewport of LOW_HEIGHT_DESKTOPS) {
         await expect(page.getByTestId(`upgrade-card-select-${index}`)).toBeHidden();
         await expect(effect.locator('span')).toBeHidden();
 
-        const isNewActive = await card.getAttribute('data-upgrade-category') === 'active'
-          && await card.getAttribute('data-is-new') === 'true';
         const description = card.locator('.ui-upgrade-card__description');
-        if (isNewActive) {
-          essentialDescriptionCount += 1;
-          await expect(description).toBeVisible();
-          await expect(description).toHaveClass(/is-mobile-essential/);
-          expectRectContained(await visibleRect(description), cardBox);
-        } else {
-          await expect(description).toBeHidden();
-        }
+        await expect(description).toBeHidden();
 
         const visibleCopy = (await card.innerText())
           .split(/\r?\n/)
@@ -243,7 +268,6 @@ for (const viewport of LOW_HEIGHT_DESKTOPS) {
 
       expect(new Set(optionIds).size).toBe(3);
       expect(new Set(titles).size).toBe(3);
-      expect(essentialDescriptionCount).toBe(2);
       for (const cardBox of cardBoxes.slice(1)) {
         expect(Math.abs(cardBox.y - cardBoxes[0].y)).toBeLessThanOrEqual(0.5);
         expect(Math.abs(cardBox.width - cardBoxes[0].width)).toBeLessThanOrEqual(0.5);
@@ -298,11 +322,39 @@ test.describe('low-height coarse pointer compatibility', () => {
     expect(panelBox.height).toBeLessThanOrEqual(470.5);
     const cards = page.locator('.ui-upgrade-card');
     await expect(cards).toHaveCount(3);
-    await page.getByTestId('levelup-reroll').focus();
+    const reroll = page.getByTestId('levelup-reroll');
+    await reroll.focus();
     for (let index = 0; index < 3; index += 1) {
-      const cardBox = await visibleRect(page.getByTestId(`upgrade-card-${index}`));
+      const card = page.getByTestId(`upgrade-card-${index}`);
+      const cardBox = await visibleRect(card);
       expect(cardBox.height).toBeLessThanOrEqual(350.5);
       expectRectContained(cardBox, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+      const art = page.getByTestId(`upgrade-card-art-${index}`);
+      const artBox = await visibleRect(art);
+      expect(artBox.height).toBeGreaterThanOrEqual(238.5);
+      expect(artBox.height / cardBox.height).toBeGreaterThanOrEqual(0.69);
+      const image = art.locator('img');
+      const imageBox = await visibleRect(image);
+      expectRectContained(imageBox, artBox);
+      expect(imageBox.height).toBeGreaterThanOrEqual(artBox.height - 1.5);
+      const imageContract = await image.evaluate((element: HTMLImageElement) => ({
+        naturalWidth: element.naturalWidth,
+        naturalHeight: element.naturalHeight,
+        objectFit: getComputedStyle(element).objectFit,
+      }));
+      expect(Math.abs(imageContract.naturalWidth - imageContract.naturalHeight)).toBeLessThanOrEqual(1);
+      expect(imageContract.objectFit).toBe('contain');
+      const body = card.locator('.ui-upgrade-card__body');
+      const bodyBox = await visibleRect(body);
+      expect(bodyBox.height).toBeLessThanOrEqual(75.5);
+      for (const child of [
+        page.getByTestId(`upgrade-card-title-${index}`),
+        card.locator('.ui-upgrade-card__level'),
+        page.getByTestId(`upgrade-card-effect-${index}`),
+      ]) {
+        expectRectContained(await visibleRect(child), bodyBox);
+      }
+      await expect(card.locator('.ui-upgrade-card__description')).toBeHidden();
     }
     const overlayScroll = await modal.evaluate((element) => ({
       clientHeight: element.clientHeight,

@@ -133,7 +133,7 @@
   .ui-levelup__cards { min-height: 0; gap: 12px; }
   .ui-overlay--levelup .ui-upgrade-card {
     display: grid;
-    grid-template-rows: 30px 120px minmax(0, 1fr);
+    grid-template-rows: 30px 240px 75px;
     min-height: 0;
     height: 345px;
     max-height: 345px;
@@ -145,41 +145,43 @@
   .ui-upgrade-card__header kbd,
   .ui-upgrade-card__rarity,
   .ui-upgrade-card__new { display: none; }
-  .ui-upgrade-card__art { height: 120px; }
+  .ui-upgrade-card__art { height: 240px; }
+  .ui-upgrade-card__art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
   .ui-upgrade-card__fallback-icon { width: 78px; height: 78px; }
   .ui-upgrade-card__fallback-icon svg { width: 42px; height: 42px; }
   .ui-upgrade-card__body {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 18px minmax(0, 1fr);
+    gap: 3px 8px;
     min-height: 0;
-    flex-direction: column;
-    padding: 11px 14px 12px;
+    padding: 5px 10px 6px;
   }
-  .ui-upgrade-card__body h3 { overflow: hidden; margin: 0; font-size: 17px; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
-  .ui-upgrade-card__level { gap: 5px; margin-top: 5px; font-size: 9px; }
+  .ui-upgrade-card__body h3 { align-self: center; overflow: hidden; margin: 0; font-size: 15px; line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-upgrade-card__level { align-self: center; gap: 4px; margin: 0; font-size: 8px; }
   .ui-upgrade-card[data-is-new='true'] .ui-upgrade-card__level > span:first-child,
   .ui-upgrade-card[data-is-new='true'] .ui-upgrade-card__level > svg { display: none; }
   .ui-upgrade-card[data-upgrade-category='recovery'] .ui-upgrade-card__level { display: none; }
   .ui-upgrade-card__description,
   .ui-upgrade-card__current,
   .ui-upgrade-card__select { display: none; }
-  .ui-upgrade-card__description.is-mobile-essential {
-    display: -webkit-box;
-    overflow: hidden;
-    min-height: 0;
-    margin: 7px 0 0;
-    color: #8ca3ae;
-    font-size: 9px;
-    line-height: 1.35;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
+  .ui-upgrade-card__description.is-mobile-essential { display: none; }
   .ui-upgrade-card__effect {
-    display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
     justify-content: center;
-    margin-top: auto;
-    padding: 9px 10px;
-    font-size: 11px;
-    line-height: 1.35;
+    overflow: hidden;
+    margin: 0;
+    padding: 5px 8px;
+    font-size: 10px;
+    line-height: 1.25;
   }
   .ui-upgrade-card__effect span { display: none; }
   .ui-levelup__footer { align-self: end; min-height: 38px; margin-top: 4px; }
@@ -449,11 +451,20 @@
   .ui-upgrade-card[data-upgrade-category='survival'] .ui-upgrade-card__category::after { content: 'SURVIVAL'; font-size: 8px; }
   .ui-upgrade-card[data-upgrade-category='recovery'] .ui-upgrade-card__category::after { content: 'RECOVERY'; font-size: 8px; }
   .ui-upgrade-card__art { flex: 0 0 100px; height: 100px; }
+  .ui-upgrade-card__art img { position: relative; inset: auto; object-fit: cover; }
   .ui-upgrade-card__rarity { display: none; }
   .ui-upgrade-card__new { display: none; }
   .ui-upgrade-card__fallback-icon { width: 72px; height: 72px; }
   .ui-upgrade-card__fallback-icon svg { width: 38px; }
-  .ui-upgrade-card__body { display: grid; flex: 1; grid-template-rows: auto auto auto auto; align-content: start; padding: 8px 10px 9px; }
+  .ui-upgrade-card__body {
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    gap: 0;
+    align-content: start;
+    padding: 8px 10px 9px;
+  }
   .ui-upgrade-card__body h3 { overflow: hidden; margin: 0; font-size: 13px; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
   .ui-upgrade-card__level { gap: 3px; margin-top: 3px; font-size: 8px; }
   .ui-upgrade-card[data-is-new='true'] .ui-upgrade-card__level > span:first-child,
@@ -462,7 +473,7 @@
   .ui-upgrade-card__description { display: none; }
   .ui-upgrade-card__description.is-mobile-essential { display: -webkit-box; overflow: hidden; min-height: 0; margin: 5px 0 0; color: #829ba7; font-size: 8px; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
   .ui-upgrade-card__current { display: none; }
-  .ui-upgrade-card__effect { align-self: stretch; overflow: hidden; max-height: none; margin-top: 8px; padding: 7px 8px; font-size: 10px; line-height: 1.3; }
+  .ui-upgrade-card__effect { grid-column: auto; grid-row: auto; align-self: stretch; overflow: hidden; max-height: none; margin-top: 8px; padding: 7px 8px; font-size: 10px; line-height: 1.3; }
   .ui-upgrade-card__effect span { display: none; }
   .ui-upgrade-card__select { display: none; }
   .ui-levelup__footer { gap: 8px; margin-top: 4px; }
