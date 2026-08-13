@@ -1188,15 +1188,32 @@ kbd {
 .ui-skill__empty-track span { flex: 1; border: 1px solid rgba(102, 128, 139, 0.18); background: rgba(63, 78, 86, 0.22); }
 
 .ui-hud__desktop-help {
-  display: flex;
-  gap: 13px;
-  color: rgba(159, 182, 192, 0.48);
-  font-size: 7px;
+  display: none;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: max-content;
+  max-width: calc(50vw - 340px);
+  min-height: 38px;
+  padding: 5px 8px;
+  color: rgba(192, 220, 228, .88);
+  border: 1px solid rgba(91, 165, 183, .22);
+  background: linear-gradient(100deg, rgba(4, 15, 22, .9), rgba(5, 17, 24, .68));
+  box-shadow: inset 0 1px rgba(255,255,255,.035), 0 8px 24px rgba(0,0,0,.2);
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  backdrop-filter: blur(6px);
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: .04em;
 }
-.ui-hud__desktop-help span { display: flex; align-items: center; gap: 5px; }
-.ui-hud__desktop-help kbd { opacity: 0.6; }
+.ui-desktop-control { display: flex; align-items: center; gap: 5px; padding: 0 8px; border-right: 1px solid rgba(113,166,181,.16); white-space: nowrap; }
+.ui-desktop-control:first-child { padding-left: 1px; }
+.ui-desktop-control:last-child { padding-right: 1px; border-right: 0; }
+.ui-desktop-control kbd { min-height: 20px; padding: 2px 5px; color: #b9edf7; border-color: rgba(99,194,215,.32); background: rgba(7,31,41,.86); box-shadow: inset 0 1px rgba(255,255,255,.05); font-size: 8px; letter-spacing: .04em; }
+.ui-desktop-control b { color: #b7ccd3; font-size: 9px; font-weight: 800; }
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-hud__desktop-help { display: flex; }
+}
 
 /* Full-screen overlays */
 .ui-overlay {

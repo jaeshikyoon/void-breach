@@ -345,11 +345,18 @@ export function GameHud({
       {boss && <div className="ui-hud__boss"><BossHealthBar boss={boss} /></div>}
       {showBossWarning && <div className="ui-hud__warning"><BossWarning bossName={warningName} /></div>}
       <div className="ui-hud__skills"><SkillTray skills={skills} /></div>
-      <div className="ui-hud__desktop-help" aria-hidden="true">
-        <span><kbd>WASD</kbd> MOVE</span>
-        <span><kbd>LMB</kbd> FIRE</span>
-        <span><kbd>SPACE</kbd> DASH</span>
-      </div>
+      <aside
+        className="ui-hud__desktop-help"
+        aria-label="PC 전투 조작 안내"
+        data-testid="desktop-controls-help"
+      >
+        <span className="ui-desktop-control" data-testid="desktop-control-move"><kbd>WASD</kbd><b>이동</b></span>
+        <span className="ui-desktop-control" data-testid="desktop-control-aim"><kbd>마우스</kbd><b>조준</b></span>
+        <span className="ui-desktop-control" data-testid="desktop-control-fire"><kbd>LMB</kbd><b>사격</b></span>
+        <span className="ui-desktop-control" data-testid="desktop-control-dodge"><kbd>SPACE</kbd><b>회피</b></span>
+        <span className="ui-desktop-control" data-testid="desktop-control-skills"><kbd>Q · E · R</kbd><b>스킬</b></span>
+        <span className="ui-desktop-control" data-testid="desktop-control-pause"><kbd>ESC</kbd><b>일시정지</b></span>
+      </aside>
     </div>
   );
 }

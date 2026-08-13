@@ -38,7 +38,21 @@
   .ui-hud__xp { top: 112px; left: 12px; }
   .ui-hud__boss { top: 113px; }
   .ui-hud__skills { right: auto; bottom: 14px; left: 50%; }
-  .ui-hud__desktop-help { left: 14px; bottom: 14px; }
+  .ui-hud__desktop-help {
+    right: auto;
+    bottom: 14px;
+    left: 14px;
+    flex-wrap: wrap;
+    width: 346px;
+    max-width: calc(50vw - 294px);
+    min-height: 58px;
+    row-gap: 5px;
+    padding: 4px 6px;
+  }
+  .ui-desktop-control { flex: 1 0 30%; justify-content: center; gap: 4px; padding: 0 5px; }
+  .ui-desktop-control:nth-child(3) { border-right: 0; }
+  .ui-desktop-control kbd { min-height: 18px; padding: 1px 4px; font-size: 8px; }
+  .ui-desktop-control b { font-size: 9px; }
 
   .ui-overlay--levelup { align-items: start; overflow-y: auto; padding: 15px 2vw; }
   .ui-levelup { margin: auto; }
@@ -84,6 +98,23 @@
   .ui-stage-preview__number strong { font-size: 78px; }
   .ui-stage-select__action { margin-top: 8px; }
   .ui-stage-select__footer { margin-top: 9px; padding-top: 7px; }
+}
+
+/* Mid-size desktop widths need two rows even when their height is just above
+   the compact-landscape breakpoint (for example 1366 x 768). */
+@media (hover: hover) and (pointer: fine) and (max-width: 1600px) {
+  .ui-hud__desktop-help {
+    flex-wrap: wrap;
+    width: 346px;
+    max-width: 346px;
+    min-height: 58px;
+    row-gap: 5px;
+    padding: 4px 6px;
+  }
+  .ui-desktop-control { flex: 1 0 30%; justify-content: center; gap: 4px; padding: 0 5px; }
+  .ui-desktop-control:nth-child(3) { border-right: 0; }
+  .ui-desktop-control kbd { min-height: 18px; padding: 1px 4px; font-size: 8px; }
+  .ui-desktop-control b { font-size: 9px; }
 }
 
 @media (max-height: 580px) and (orientation: landscape) {
