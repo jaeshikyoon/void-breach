@@ -234,7 +234,8 @@ for (const viewport of LANDSCAPE_VIEWPORTS) {
         const card = page.getByTestId(`upgrade-card-${index}`);
         await card.scrollIntoViewIfNeeded();
         const cardBox = await expectContained(card, viewport);
-        expect(cardBox.height).toBeLessThanOrEqual(230.5);
+        expect(cardBox.height).toBeGreaterThanOrEqual(245.5);
+        expect(cardBox.height).toBeLessThanOrEqual(246.5);
         await card.focus();
         await expect(card).toBeFocused();
 
@@ -244,14 +245,21 @@ for (const viewport of LANDSCAPE_VIEWPORTS) {
 
         const art = page.getByTestId(`upgrade-card-art-${index}`);
         const artBox = await expectContained(art, viewport);
-        expect(artBox.height).toBeGreaterThanOrEqual(99.5);
-        expect(artBox.height).toBeLessThanOrEqual(100.5);
+        expect(artBox.height).toBeGreaterThanOrEqual(163.5);
+        expect(artBox.height).toBeLessThanOrEqual(164.5);
+        expect(artBox.height / cardBox.height).toBeGreaterThanOrEqual(.665);
+        expect(artBox.height / cardBox.height).toBeLessThanOrEqual(.67);
+        const body = card.locator('.ui-upgrade-card__body');
+        const bodyBox = await expectContained(body, viewport);
+        expect(bodyBox.height).toBeGreaterThanOrEqual(81.5);
+        expect(bodyBox.height).toBeLessThanOrEqual(82.5);
         const image = art.locator('img');
         await expect(image).toHaveCount(1);
         await expect(image).toBeVisible();
         expect(await image.evaluate((element: HTMLImageElement) => (
           element.complete && element.naturalWidth > 0 && element.naturalHeight > 0
         ))).toBe(true);
+        expect(await image.evaluate((element) => getComputedStyle(element).objectFit)).toBe('contain');
 
         const title = page.getByTestId(`upgrade-card-title-${index}`);
         const effect = page.getByTestId(`upgrade-card-effect-${index}`);
@@ -261,6 +269,9 @@ for (const viewport of LANDSCAPE_VIEWPORTS) {
         const effectText = (await effect.innerText()).trim();
         expect(titleText.length).toBeGreaterThan(0);
         expect(effectText.length).toBeGreaterThan(0);
+        expect(await title.evaluate((element) => (
+          Number.parseFloat(getComputedStyle(element).fontSize)
+        ))).toBeGreaterThanOrEqual(14);
         titles.push(titleText);
 
         const category = await card.getAttribute('data-upgrade-category');
@@ -291,7 +302,7 @@ for (const viewport of LANDSCAPE_VIEWPORTS) {
           expect((await description.innerText()).trim().length).toBeGreaterThan(0);
           expect(await description.evaluate((element) => (
             Number.parseFloat(getComputedStyle(element).fontSize)
-          ))).toBeGreaterThanOrEqual(8);
+          ))).toBeGreaterThanOrEqual(10);
         } else {
           await expect(description).toBeHidden();
         }
@@ -300,7 +311,7 @@ for (const viewport of LANDSCAPE_VIEWPORTS) {
         await expect(effect.locator('span')).toBeHidden();
         expect(await effect.evaluate((element) => (
           Number.parseFloat(getComputedStyle(element).fontSize)
-        ))).toBeGreaterThanOrEqual(10);
+        ))).toBeGreaterThanOrEqual(11);
         const level = card.locator('.ui-upgrade-card__level');
         if (category === 'recovery') {
           await expect(level).toBeHidden();
@@ -308,7 +319,7 @@ for (const viewport of LANDSCAPE_VIEWPORTS) {
           await expect(level).toBeVisible();
           expect(await level.evaluate((element) => (
             Number.parseFloat(getComputedStyle(element).fontSize)
-          ))).toBeGreaterThanOrEqual(8);
+          ))).toBeGreaterThanOrEqual(9);
         }
         const visibleCopy = (await card.innerText()).split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
         expect(visibleCopy.filter((line) => line === titleText)).toHaveLength(1);
