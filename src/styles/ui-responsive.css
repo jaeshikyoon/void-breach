@@ -416,6 +416,103 @@
   .ui-boss-bar__numbers { display: none; }
 }
 
+/* Taller mobile landscape screens used to fall back to the desktop card.
+   Keep the same image-first protocol composition on those devices too. */
+@media (hover: none) and (orientation: landscape) and (min-height: 701px),
+       (pointer: coarse) and (orientation: landscape) and (min-height: 701px) {
+  .ui-overlay--levelup .ui-upgrade-card {
+    display: flex;
+    flex-direction: column;
+    height: min(57vh, 440px);
+    min-height: min(57vh, 440px);
+    grid-template-rows: none;
+  }
+  .ui-overlay--levelup .ui-upgrade-card__header {
+    position: absolute;
+    z-index: 5;
+    top: 7px;
+    left: 7px;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .ui-upgrade-card__header kbd,
+  .ui-upgrade-card__rarity,
+  .ui-upgrade-card__new { display: none; }
+  .ui-upgrade-card__art {
+    flex: 2 1 0;
+    height: auto;
+    min-height: 0;
+  }
+  .ui-upgrade-card__art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+  .ui-upgrade-card__body {
+    display: grid;
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 22px auto auto;
+    gap: 3px 7px;
+    align-content: start;
+    padding: 6px 10px 8px;
+  }
+  .ui-upgrade-card__body h3 {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    overflow: hidden;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ui-upgrade-card__level {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin: 0;
+    font-size: 10px;
+  }
+  .ui-upgrade-card__description,
+  .ui-upgrade-card__description.is-mobile-essential {
+    display: -webkit-box;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    overflow: hidden;
+    min-height: 0;
+    margin: 0;
+    color: #b2c7d0;
+    font-size: 11px;
+    line-height: 1.25;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .ui-upgrade-card__current { display: none; }
+  .ui-upgrade-card__effect {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    align-self: start;
+    overflow: hidden;
+    max-height: none;
+    margin: 1px 0 0;
+    padding: 5px 8px;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .ui-upgrade-card__effect span,
+  .ui-upgrade-card__select { display: none; }
+  .ui-levelup__footer > p { display: none; }
+  .ui-reroll-button { min-height: 44px; }
+}
+
 @media (hover: none) and (orientation: landscape) and (max-height: 600px) {
   .ui-start-screen__content {
     width: min(93vw, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 20px));
