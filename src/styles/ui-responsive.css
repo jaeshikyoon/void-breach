@@ -419,7 +419,8 @@
 /* Taller mobile landscape screens used to fall back to the desktop card.
    Keep the same image-first protocol composition on those devices too. */
 @media (hover: none) and (orientation: landscape) and (min-height: 701px),
-       (pointer: coarse) and (orientation: landscape) and (min-height: 701px) {
+       (pointer: coarse) and (orientation: landscape) and (min-height: 701px),
+       (orientation: landscape) and (min-width: 601px) and (max-width: 1600px) and (min-height: 701px) {
   .ui-overlay--levelup .ui-upgrade-card {
     display: flex;
     flex-direction: column;
