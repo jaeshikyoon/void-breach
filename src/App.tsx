@@ -324,7 +324,7 @@ export function App() {
         vitals={snapshot.vitals}
         progress={snapshot.progress}
         skills={activeSkills}
-        playerScreenPosition={snapshot.playerScreenPosition}
+        {...(snapshot.playerScreenPosition ? { playerScreenPosition: snapshot.playerScreenPosition } : {})}
         dodgeCooldownRemaining={snapshot.dashCooldownRemaining}
         dodgeCooldownTotal={snapshot.dashCooldownTotal}
         boss={snapshot.boss}
