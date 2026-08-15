@@ -130,6 +130,7 @@ export function GameUi(props: GameUiProps) {
           onAttackAim={props.onAttackAim}
           onDodge={props.onDodge}
           onSkill={props.onSkill}
+          onSkillAim={props.onSkillAim}
         />
       )}
       {screen === 'levelup' && (

@@ -140,6 +140,7 @@ export interface RuntimeControlApi {
   setVirtualMovement(vector: Vec2): void;
   setVirtualAttack(pressed: boolean): void;
   setVirtualAimDirection(direction: Vec2 | null): void;
+  setVirtualSkillAimDirection(skillId: ActiveSkillId, direction: Vec2 | null): void;
   triggerDash(): void;
   triggerSkill(skill: ActiveSkillId | number): void;
 }

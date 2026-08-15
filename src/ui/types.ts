@@ -200,6 +200,7 @@ export interface MobileControlsProps {
   onAttackAim: (vector: MoveVector | null) => void;
   onDodge: () => void;
   onSkill: (skillId: ActiveSkillId) => void;
+  onSkillAim: (skillId: ActiveSkillId, vector: MoveVector | null) => void;
 }
 
 export interface GameUiProps {
@@ -242,4 +243,5 @@ export interface GameUiProps {
   onAttackAim: (vector: MoveVector | null) => void;
   onDodge: () => void;
   onSkill: (skillId: ActiveSkillId) => void;
+  onSkillAim: (skillId: ActiveSkillId, vector: MoveVector | null) => void;
 }

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react';
 import type { ActiveSkillId } from '../game/core/types';
 import { UiIcon } from './icons';
 import type { MobileControlsProps, MoveVector, SkillHudItem } from './types';
 import { clamp01 } from './utils';
 
 export const ATTACK_AIM_DRAG_THRESHOLD = 14;
+export const SKILL_AIM_DRAG_THRESHOLD = 8;
 
 export interface PointerOrigin {
   x: number;
@@ -105,9 +106,10 @@ interface MobileSkillButtonProps {
   index: number;
   skill?: SkillHudItem;
   onSkill: (id: ActiveSkillId) => void;
+  onSkillAim: (id: ActiveSkillId, vector: MoveVector | null) => void;
 }
 
-function MobileSkillButton({ index, skill, onSkill }: MobileSkillButtonProps) {
+function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillButtonProps) {
   if (!skill) {
     return (
       <div
@@ -127,20 +129,60 @@ function MobileSkillButton({ index, skill, onSkill }: MobileSkillButtonProps) {
   const cooldown = clamp01(skill.cooldownRemaining / Math.max(skill.cooldownTotal, 0.001));
   const disabled = skill.cooldownRemaining > 0;
   const state = disabled ? 'cooldown' : 'ready';
+  const pointerRef = useRef<number | null>(null);
+  const originRef = useRef<PointerOrigin | null>(null);
+  const [aiming, setAiming] = useState(false);
+  const resolveSkillAim = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const origin = originRef.current;
+    if (!origin) return null;
+    const dx = event.clientX - origin.x;
+    const dy = event.clientY - origin.y;
+    const length = Math.hypot(dx, dy);
+    if (length < SKILL_AIM_DRAG_THRESHOLD) return null;
+    return { x: dx / length, y: dy / length };
+  };
+  const finish = (pointerId: number, event?: PointerEvent<HTMLButtonElement>) => {
+    if (pointerRef.current !== pointerId) return;
+    const vector = event ? resolveSkillAim(event) : null;
+    pointerRef.current = null;
+    originRef.current = null;
+    setAiming(false);
+    if (!disabled) {
+      onSkillAim(skill.id, vector);
+      onSkill(skill.id);
+    }
+    onSkillAim(skill.id, null);
+  };
   return (
     <button
-      className={`ui-touch-skill ui-touch-skill--${skill.tone ?? 'cyan'} is-${state}`}
+      className={`ui-touch-skill ui-touch-skill--${skill.tone ?? 'cyan'} is-${state}${aiming ? ' is-aiming' : ''}`}
       type="button"
       aria-label={`${skill.name}, 레벨 ${skill.level}${disabled ? `, 재사용 대기 ${skill.cooldownRemaining.toFixed(1)}초` : ', 사용 가능'}`}
       disabled={disabled}
       data-testid={`mobile-skill-slot-${index}`}
       data-slot={index}
       data-skill-state={state}
+      data-aiming={aiming}
       data-cooldown={skill.cooldownRemaining.toFixed(1)}
       onPointerDown={(event) => {
         event.preventDefault();
-        if (!disabled) onSkill(skill.id);
+        if (disabled || pointerRef.current !== null) return;
+        pointerRef.current = event.pointerId;
+        originRef.current = { x: event.clientX, y: event.clientY };
+        event.currentTarget.setPointerCapture(event.pointerId);
+        onSkillAim(skill.id, null);
       }}
+      onPointerMove={(event) => {
+        if (pointerRef.current !== event.pointerId) return;
+        event.preventDefault();
+        const vector = resolveSkillAim(event);
+        const nextAiming = vector !== null;
+        setAiming(nextAiming);
+        onSkillAim(skill.id, vector);
+      }}
+      onPointerUp={(event) => finish(event.pointerId, event)}
+      onPointerCancel={(event) => finish(event.pointerId)}
+      onLostPointerCapture={(event) => finish(event.pointerId)}
     >
       <span className="ui-touch-skill__icon" aria-hidden="true">
         {skill.iconSrc ? <img src={skill.iconSrc} alt="" draggable={false} /> : <UiIcon name="bolt" size={23} />}
@@ -166,12 +208,18 @@ export function MobileControls({
   onAttackAim,
   onDodge,
   onSkill,
+  onSkillAim,
 }: MobileControlsProps) {
   const dodgeCoolingDown = dodgeCooldownRemaining > 0;
   const dodgeRatio = clamp01(dodgeCooldownRemaining / Math.max(dodgeCooldownTotal, 0.001));
   const attackPointerRef = useRef<number | null>(null);
   const attackOriginRef = useRef<PointerOrigin | null>(null);
   const [attackAiming, setAttackAiming] = useState(false);
+  const [skillAim, setSkillAim] = useState<{ skillId: ActiveSkillId; vector: MoveVector } | null>(null);
+  const handleSkillAim = useCallback((skillId: ActiveSkillId, vector: MoveVector | null) => {
+    setSkillAim(vector ? { skillId, vector } : null);
+    onSkillAim(skillId, vector);
+  }, [onSkillAim]);
   const releaseCallbacksRef = useRef({ onMoveEnd, onAttackChange, onAttackAim });
   releaseCallbacksRef.current = { onMoveEnd, onAttackChange, onAttackAim };
 
@@ -211,6 +259,7 @@ export function MobileControls({
                 index={index}
                 {...(skill ? { skill } : {})}
                 onSkill={onSkill}
+                onSkillAim={handleSkillAim}
               />
             );
           })}
@@ -256,6 +305,13 @@ export function MobileControls({
           <span>FIRE</span>
         </button>
       </div>
+      <div
+        className={`ui-skill-aim-preview${skillAim ? ' is-visible' : ''}`}
+        data-testid="mobile-skill-aim-preview"
+        data-skill-id={skillAim?.skillId ?? ''}
+        aria-hidden="true"
+        style={skillAim ? { transform: `rotate(${Math.atan2(skillAim.vector.y, skillAim.vector.x)}rad)` } : undefined}
+      ><span /></div>
     </div>
   );
 }
