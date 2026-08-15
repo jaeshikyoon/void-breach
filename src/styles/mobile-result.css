@@ -19,6 +19,26 @@
     position: relative;
     overflow: hidden !important;
   }
+  .mobile-result-screen .ui-result__panel::after {
+    position: absolute;
+    z-index: 0;
+    top: 194px;
+    right: 0;
+    bottom: 58px;
+    left: 0;
+    display: grid;
+    place-items: center;
+    content: 'OPERATION SECURED  //  NEXT DEPLOYMENT READY';
+    color: rgba(113, 166, 181, .28);
+    border-top: 1px solid rgba(77, 179, 203, .11);
+    border-bottom: 1px solid rgba(77, 179, 203, .11);
+    background: linear-gradient(rgba(31, 113, 135, .025), rgba(2, 11, 16, .12));
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: .22em;
+    pointer-events: none;
+  }
+  .mobile-result-screen .ui-result__panel > * { position: relative; z-index: 1; }
 
   .mobile-result-screen .ui-result__header {
     height: 62px;

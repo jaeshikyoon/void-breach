@@ -1462,12 +1462,14 @@ kbd {
 .ui-touch-dodge:disabled { color: #596a72; }
 .ui-touch-dodge strong { position: absolute; z-index: 2; color: #fff; font-size: 12px; }
 .ui-touch-skills { position: absolute; inset: 0; pointer-events: none; }
-.ui-skill-aim-preview { position: absolute; z-index: 20; left: 50%; top: 50%; display: none; width: 190px; height: 3px; pointer-events: none; transform-origin: 0 50%; border-radius: 999px; background: linear-gradient(90deg, rgba(142,234,255,.92), rgba(142,234,255,.16)); box-shadow: 0 0 10px rgba(91,218,255,.85); }
+.ui-skill-aim-preview { display: none !important; }
 .ui-skill-aim-preview.is-visible { display: block; }
 .ui-skill-aim-preview::after { position: absolute; right: -2px; top: -13px; width: 0; height: 0; content: ''; border-top: 14px solid transparent; border-bottom: 14px solid transparent; border-left: 25px solid rgba(142,234,255,.3); filter: drop-shadow(0 0 5px rgba(91,218,255,.8)); }
 .ui-skill-aim-preview span { position: absolute; left: 40px; top: -26px; width: 118px; height: 52px; border: 1px solid rgba(142,234,255,.4); border-left: 0; border-radius: 0 52px 52px 0; background: linear-gradient(90deg, rgba(68,203,255,.06), rgba(68,203,255,.18)); }
 .ui-skill-aim-preview b { position: absolute; right: 8px; top: 12px; min-width: 30px; padding: 3px 6px; color: #dffaff; border: 1px solid rgba(142,234,255,.55); border-radius: 8px; background: rgba(2,12,19,.86); font-size: 10px; font-weight: 800; line-height: 1; text-align: center; transform: rotate(0deg); }
 .ui-touch-skill { --touch-tone: var(--ui-cyan); position: absolute; display: grid; place-items: center; width: 56px; height: 56px; padding: 0; color: var(--touch-tone); pointer-events: auto; cursor: pointer; border: 0; border-radius: 50%; background: transparent; box-shadow: 0 5px 14px rgba(0,0,0,.28); }
+.ui-touch-skill__aim-line { display: none !important; }
+.ui-touch-skill__aim-line::after { position: absolute; right: -2px; top: -12px; width: 0; height: 0; content: ''; border-top: 13px solid transparent; border-bottom: 13px solid transparent; border-left: 22px solid rgba(142,234,255,.34); filter: drop-shadow(0 0 5px rgba(91,218,255,.8)); }
 .ui-touch-skill[data-slot='0'] { right: 18px; bottom: 112px; }
 .ui-touch-skill[data-slot='1'] { right: 82px; bottom: 107px; }
 .ui-touch-skill[data-slot='2'] { right: 142px; bottom: 73px; }

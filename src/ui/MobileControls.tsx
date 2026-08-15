@@ -132,6 +132,8 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
   const pointerRef = useRef<number | null>(null);
   const originRef = useRef<PointerOrigin | null>(null);
   const [aiming, setAiming] = useState(false);
+  const [aimVector, setAimVector] = useState<MoveVector>({ x: 1, y: 0 });
+  const [aimDistance, setAimDistance] = useState(0);
   const resolveSkillAim = (event: PointerEvent<HTMLButtonElement>) => {
     const origin = originRef.current;
     if (!origin) return null;
@@ -147,6 +149,8 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
     pointerRef.current = null;
     originRef.current = null;
     setAiming(false);
+    setAimVector({ x: 1, y: 0 });
+    setAimDistance(0);
     if (!disabled) {
       onSkillAim(skill.id, aim?.vector ?? null, aim?.distance);
       onSkill(skill.id);
@@ -178,6 +182,8 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
         const aim = resolveSkillAim(event);
         const nextAiming = aim !== null;
         setAiming(nextAiming);
+        setAimVector(aim?.vector ?? { x: 1, y: 0 });
+        setAimDistance(aim?.distance ?? 0);
         onSkillAim(skill.id, aim?.vector ?? null, aim?.distance);
       }}
       onPointerUp={(event) => finish(event.pointerId, event)}
@@ -187,6 +193,16 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
       <span className="ui-touch-skill__icon" aria-hidden="true">
         {skill.iconSrc ? <img src={skill.iconSrc} alt="" draggable={false} /> : <UiIcon name="bolt" size={23} />}
       </span>
+      {aiming && (
+        <span
+          className="ui-touch-skill__aim-line"
+          aria-hidden="true"
+          style={{
+            width: `${Math.min(220, Math.max(48, aimDistance * 2.1))}px`,
+            transform: `rotate(${Math.atan2(aimVector.y, aimVector.x)}rad)`,
+          }}
+        />
+      )}
       {disabled && (
         <svg className="ui-touch-skill__cooldown-ring" viewBox="0 0 42 42" aria-hidden="true">
           <circle cx="21" cy="21" r="19" pathLength="1" style={{ strokeDashoffset: 1 - cooldown }} />
