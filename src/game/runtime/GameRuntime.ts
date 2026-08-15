@@ -4163,9 +4163,12 @@ export class GameRuntime {
       worldY += (this.rng.next() - 0.5) * this.shakeStrength * 2 * falloff;
     }
     this.world.position.set(worldX, worldY);
+    const canvasRect = this.app?.canvas.getBoundingClientRect();
+    const cssScaleX = canvasRect && viewWidth > 0 ? canvasRect.width / viewWidth : 1;
+    const cssScaleY = canvasRect && viewHeight > 0 ? canvasRect.height / viewHeight : 1;
     this.playerScreenPosition = {
-      x: worldX + player.position.x * cameraScale,
-      y: worldY + player.position.y * cameraScale,
+      x: (canvasRect?.left ?? 0) + (worldX + player.position.x * cameraScale) * cssScaleX,
+      y: (canvasRect?.top ?? 0) + (worldY + player.position.y * cameraScale) * cssScaleY,
     };
     this.positionBossWarning();
   }

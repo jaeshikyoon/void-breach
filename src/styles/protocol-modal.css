@@ -9,7 +9,12 @@
   grid-template-rows: 48px minmax(0, 1fr) 48px !important;
   gap: 8px;
   min-height: 0;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
+.protocol-modal__cards,
+.protocol-modal__card,
+.protocol-modal__panel .ui-secondary-button { pointer-events: auto !important; }
 
 .protocol-modal__panel > .ui-levelup__header {
   width: 100%;
