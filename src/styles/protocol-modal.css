@@ -59,6 +59,13 @@
   min-width: 0 !important;
 }
 
+/* These two white corner marks belong to the legacy card frame. On the
+   compact picker they sit over the copy area, so the protocol frame itself
+   is the only border treatment. */
+.protocol-modal__card > .ui-upgrade-card__corner {
+  display: none !important;
+}
+
 /* Use one short, stable category chip. The old responsive sheet adds a
    second pseudo-label next to the full legacy copy, which is why screenshots
    showed duplicated ACTIVE PROTOCOL / SKILL text. */
@@ -108,13 +115,13 @@
   grid-row: 3;
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   align-content: start;
   gap: 4px 8px;
   min-height: 0;
   height: auto !important;
   overflow: hidden;
-  padding: 8px 10px;
+  padding: 10px 12px 9px;
 }
 
 .protocol-modal__card .ui-upgrade-card__body h3 {
@@ -148,19 +155,19 @@
   font-size: clamp(10px, .9vw, 13px);
   line-height: 1.25;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
 }
 
 .protocol-modal__card .ui-upgrade-card__current { display: none !important; }
 
 .protocol-modal__card .ui-upgrade-card__effect {
   grid-column: 1 / -1;
-  grid-row: 3 / span 2;
+  grid-row: 3;
   align-self: start;
   min-height: 0;
   margin: 0;
   overflow: hidden;
-  padding: 5px 8px;
+  padding: 6px 9px;
   font-size: clamp(10px, .9vw, 13px);
   line-height: 1.25;
 }
@@ -182,7 +189,7 @@
   }
   .protocol-modal__cards { gap: 12px; }
   .protocol-modal__card {
-    grid-template-rows: 30px 250px 65px !important;
+    grid-template-rows: 30px 220px 95px !important;
     height: 345px !important;
   }
 }
@@ -195,16 +202,16 @@
   }
   .protocol-modal__cards { gap: 8px; }
   .protocol-modal__card {
-    grid-template-rows: 30px 178px 68px !important;
+    grid-template-rows: 30px 140px 76px !important;
     height: 246px !important;
   }
   .protocol-modal__card .ui-upgrade-card__header { padding: 0 7px; }
   .protocol-modal__card .ui-upgrade-card__category { font-size: 8px; }
-  .protocol-modal__card .ui-upgrade-card__body { padding: 4px 8px 5px; gap: 2px 5px; }
+  .protocol-modal__card .ui-upgrade-card__body { padding: 8px 9px 7px; gap: 3px 5px; }
   .protocol-modal__card .ui-upgrade-card__body h3 { font-size: 14px; }
   .protocol-modal__card .ui-upgrade-card__level { font-size: 9px; }
-  .protocol-modal__card .ui-upgrade-card__description { font-size: 10px; }
-  .protocol-modal__card .ui-upgrade-card__effect { font-size: 11px; padding: 4px 6px; }
+  .protocol-modal__card .ui-upgrade-card__description { font-size: 11px; line-height: 1.25; }
+  .protocol-modal__card .ui-upgrade-card__effect { font-size: 11px; padding: 5px 6px; }
   .protocol-modal__panel > .ui-levelup__header h2 { font-size: 16px; }
   .protocol-modal__panel > .ui-levelup__header .ui-eyebrow,
   .protocol-modal__panel > .ui-levelup__header > div > p:last-child,
