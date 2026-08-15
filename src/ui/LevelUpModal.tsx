@@ -28,7 +28,7 @@ function UpgradeCard({ option, index, onSelect }: {
 
   return (
     <button
-      className={`ui-upgrade-card ui-upgrade-card--${option.rarity}`}
+      className={`ui-upgrade-card protocol-modal__card ui-upgrade-card--${option.rarity}`}
       type="button"
       autoFocus={index === 0}
       onClick={() => onSelect(option)}
@@ -105,7 +105,7 @@ export function LevelUpModal({ level, options, rerollsRemaining, onSelect, onRer
       data-layout="responsive"
     >
       <div className="ui-overlay__scanlines" aria-hidden="true" />
-      <section className="ui-levelup">
+      <section className="ui-levelup protocol-modal__panel">
         <header className="ui-levelup__header">
           <span className="ui-levelup__level">LEVEL <strong>{String(level).padStart(2, '0')}</strong></span>
           <div>
@@ -116,7 +116,7 @@ export function LevelUpModal({ level, options, rerollsRemaining, onSelect, onRer
           <span className="ui-levelup__status"><i aria-hidden="true" /> TIME DILATION ACTIVE</span>
         </header>
 
-        <div className="ui-levelup__cards">
+        <div className="ui-levelup__cards protocol-modal__cards">
           {options.slice(0, 3).map((option, index) => (
             <UpgradeCard key={option.id} option={option} index={index} onSelect={onSelect} />
           ))}

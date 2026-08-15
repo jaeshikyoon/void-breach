@@ -1,0 +1,221 @@
+/* Protocol picker is intentionally isolated from the legacy HUD/card rules. */
+.protocol-modal__panel {
+  box-sizing: border-box;
+  width: min(1120px, calc(100% - 16px)) !important;
+  max-width: calc(100% - 16px) !important;
+  height: min(620px, calc(100dvh - 16px));
+  margin: auto;
+  display: grid !important;
+  grid-template-rows: 48px minmax(0, 1fr) 48px !important;
+  gap: 8px;
+  min-height: 0;
+}
+
+.protocol-modal__panel > .ui-levelup__header {
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  grid-row: 1;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.protocol-modal__panel > .ui-levelup__header h2 {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.05;
+}
+
+/* The legacy modal header has three decorative/status rows. They consume
+   space without helping a touch player choose a card, so the isolated modal
+   keeps only the level badge and title. */
+.protocol-modal__panel > .ui-levelup__header .ui-eyebrow,
+.protocol-modal__panel > .ui-levelup__header > div > p:last-child,
+.protocol-modal__panel > .ui-levelup__header .ui-levelup__status {
+  display: none !important;
+}
+
+.protocol-modal__cards {
+  grid-row: 2;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  min-height: 0;
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+.protocol-modal__card {
+  display: grid !important;
+  /* Header is deliberately small; the remaining card is image-first (about
+     2/3 art, 1/3 readable copy), instead of reserving a blank flexible row. */
+  grid-template-rows: 30px minmax(0, 3fr) minmax(0, 1fr) !important;
+  grid-template-columns: minmax(0, 1fr);
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: hidden;
+  min-width: 0 !important;
+}
+
+/* Use one short, stable category chip. The old responsive sheet adds a
+   second pseudo-label next to the full legacy copy, which is why screenshots
+   showed duplicated ACTIVE PROTOCOL / SKILL text. */
+.protocol-modal__card .ui-upgrade-card__category {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0 !important;
+  white-space: nowrap;
+}
+.protocol-modal__card .ui-upgrade-card__category::after {
+  display: inline-block !important;
+  font-size: 10px;
+  letter-spacing: .12em;
+  content: 'PROTOCOL';
+}
+.protocol-modal__card[data-upgrade-category='weapon'] .ui-upgrade-card__category::after { content: 'WEAPON'; }
+.protocol-modal__card[data-upgrade-category='survival'] .ui-upgrade-card__category::after { content: 'SURVIVAL'; }
+.protocol-modal__card[data-upgrade-category='recovery'] .ui-upgrade-card__category::after { content: 'RECOVERY'; }
+
+.protocol-modal__card > .ui-upgrade-card__header {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 3;
+  grid-row: 1;
+  min-height: 0;
+  padding: 0 10px;
+}
+
+.protocol-modal__card > .ui-upgrade-card__art {
+  grid-row: 2;
+  min-height: 0;
+  height: auto !important;
+  overflow: hidden;
+}
+
+.protocol-modal__card > .ui-upgrade-card__art img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.protocol-modal__card > .ui-upgrade-card__body {
+  grid-row: 3;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
+  gap: 4px 8px;
+  min-height: 0;
+  height: auto !important;
+  overflow: hidden;
+  padding: 8px 10px;
+}
+
+.protocol-modal__card .ui-upgrade-card__body h3 {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+  overflow: hidden;
+  font-size: clamp(15px, 1.35vw, 21px);
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.protocol-modal__card .ui-upgrade-card__level {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+  font-size: 10px;
+}
+
+.protocol-modal__card .ui-upgrade-card__description {
+  display: -webkit-box !important;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #b5cbd4;
+  font-size: clamp(10px, .9vw, 13px);
+  line-height: 1.25;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.protocol-modal__card .ui-upgrade-card__current { display: none !important; }
+
+.protocol-modal__card .ui-upgrade-card__effect {
+  grid-column: 1 / -1;
+  grid-row: 3 / span 2;
+  align-self: start;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 5px 8px;
+  font-size: clamp(10px, .9vw, 13px);
+  line-height: 1.25;
+}
+
+.protocol-modal__card .ui-upgrade-card__effect span { display: none !important; }
+.protocol-modal__card .ui-upgrade-card__select { display: none !important; }
+
+.protocol-modal__panel > .ui-levelup__footer {
+  grid-row: 3;
+  min-height: 0;
+  margin: 0;
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (min-width: 701px) {
+  .protocol-modal__panel {
+    width: min(1040px, calc(100vw - 24px));
+    height: 345px;
+    grid-template-rows: 45px 345px 42px !important;
+  }
+  .protocol-modal__cards { gap: 12px; }
+  .protocol-modal__card {
+    grid-template-rows: 30px 250px 65px !important;
+    height: 345px !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .protocol-modal__panel {
+    width: calc(100vw - 20px);
+    height: 334px;
+    grid-template-rows: 38px 246px 44px !important;
+  }
+  .protocol-modal__cards { gap: 8px; }
+  .protocol-modal__card {
+    grid-template-rows: 30px 178px 68px !important;
+    height: 246px !important;
+  }
+  .protocol-modal__card .ui-upgrade-card__header { padding: 0 7px; }
+  .protocol-modal__card .ui-upgrade-card__category { font-size: 8px; }
+  .protocol-modal__card .ui-upgrade-card__body { padding: 4px 8px 5px; gap: 2px 5px; }
+  .protocol-modal__card .ui-upgrade-card__body h3 { font-size: 14px; }
+  .protocol-modal__card .ui-upgrade-card__level { font-size: 9px; }
+  .protocol-modal__card .ui-upgrade-card__description { font-size: 10px; }
+  .protocol-modal__card .ui-upgrade-card__effect { font-size: 11px; padding: 4px 6px; }
+  .protocol-modal__panel > .ui-levelup__header h2 { font-size: 16px; }
+  .protocol-modal__panel > .ui-levelup__header .ui-eyebrow,
+  .protocol-modal__panel > .ui-levelup__header > div > p:last-child,
+  .protocol-modal__panel > .ui-levelup__header .ui-levelup__status { display: none; }
+}
+
+@media (orientation: portrait), (max-width: 700px) {
+  .protocol-modal__panel {
+    width: 100% !important;
+    max-width: calc(100% - 16px) !important;
+    height: min(620px, calc(100dvh - 12px));
+  }
+  .protocol-modal__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

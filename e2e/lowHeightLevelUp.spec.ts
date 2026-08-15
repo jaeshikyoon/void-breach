@@ -248,7 +248,8 @@ for (const viewport of LOW_HEIGHT_DESKTOPS) {
         await expect(effect.locator('span')).toBeHidden();
 
         const description = card.locator('.ui-upgrade-card__description');
-        await expect(description).toBeHidden();
+        await expect(description).toBeVisible();
+        expect((await description.innerText()).trim().length).toBeGreaterThan(0);
 
         const visibleCopy = (await card.innerText())
           .split(/\r?\n/)
@@ -354,7 +355,7 @@ test.describe('low-height coarse pointer compatibility', () => {
       ]) {
         expectRectContained(await visibleRect(child), bodyBox);
       }
-      await expect(card.locator('.ui-upgrade-card__description')).toBeHidden();
+      await expect(card.locator('.ui-upgrade-card__description')).toBeVisible();
     }
     const overlayScroll = await modal.evaluate((element) => ({
       clientHeight: element.clientHeight,

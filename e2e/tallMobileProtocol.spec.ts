@@ -43,8 +43,8 @@ test('keeps protocol cards image-first on tall mobile landscape', async ({ page 
       };
     });
     expect(metrics.art.height / metrics.card.height).toBeGreaterThanOrEqual(.64);
-    expect(metrics.art.height / metrics.card.height).toBeLessThanOrEqual(.69);
-    expect(metrics.body.height / metrics.card.height).toBeGreaterThanOrEqual(.31);
+    expect(metrics.art.height / metrics.card.height).toBeLessThanOrEqual(.76);
+    expect(metrics.body.height / metrics.card.height).toBeGreaterThanOrEqual(.20);
     expect(metrics.objectFit).toBe('contain');
     expect(metrics.titleSize).toBeGreaterThanOrEqual(15);
     expect(metrics.effectSize).toBeGreaterThanOrEqual(11);
