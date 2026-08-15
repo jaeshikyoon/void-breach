@@ -123,6 +123,9 @@ export function GameUi(props: GameUiProps) {
       {(screen === 'playing' || screen === 'levelup') && (
         <MobileControls
           skills={skills}
+          {...(props.playerScreenPosition
+            ? { playerScreenPosition: props.playerScreenPosition }
+            : {})}
           dodgeCooldownRemaining={dodgeCooldownRemaining}
           dodgeCooldownTotal={dodgeCooldownTotal}
           onMove={props.onMove}
