@@ -22,7 +22,7 @@ export function ResultScreen({
   const campaignComplete = result.victory && stageNumber >= totalStages;
 
   return (
-    <main className={`ui-screen ui-result ui-result--${result.victory ? 'victory' : 'defeat'}`} aria-labelledby="result-title">
+    <main className={`ui-screen ui-result mobile-result-screen ui-result--${result.victory ? 'victory' : 'defeat'}`} aria-labelledby="result-title">
       <div className="ui-result__backdrop" aria-hidden="true" />
       <section className="ui-result__panel">
         <header className="ui-result__header">
