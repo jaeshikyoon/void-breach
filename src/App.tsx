@@ -131,7 +131,7 @@ export function App() {
   }, [isPortrait, snapshot.status]);
 
   useEffect(() => {
-    if (screen === 'playing') return;
+    if (screen === 'playing' || screen === 'levelup') return;
     runtimeRef.current?.setVirtualMovement({ x: 0, y: 0 });
     runtimeRef.current?.setVirtualAttack(false);
     runtimeRef.current?.setVirtualAimDirection(null);
@@ -324,6 +324,7 @@ export function App() {
         vitals={snapshot.vitals}
         progress={snapshot.progress}
         skills={activeSkills}
+        playerScreenPosition={snapshot.playerScreenPosition}
         dodgeCooldownRemaining={snapshot.dashCooldownRemaining}
         dodgeCooldownTotal={snapshot.dashCooldownTotal}
         boss={snapshot.boss}

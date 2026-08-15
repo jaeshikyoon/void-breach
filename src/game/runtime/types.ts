@@ -76,6 +76,7 @@ export interface RuntimeSnapshot {
   upgradeOptions: readonly UpgradeCard[];
   rerollsRemaining: number;
   fps: number;
+  playerScreenPosition?: Vec2;
 }
 
 export interface RuntimeResult {

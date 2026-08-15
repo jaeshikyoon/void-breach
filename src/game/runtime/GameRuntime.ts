@@ -398,6 +398,7 @@ export class GameRuntime {
   private lastAimDirection: Vec2 = { x: 1, y: 0 };
   private lastPointer: Vec2 = { x: 0, y: 0 };
   private pointerAimActive = false;
+  private playerScreenPosition: Vec2 = { x: 0, y: 0 };
   private pauseInputGuard = 0;
   private fps = 60;
   private impactSfxClock = 0;
@@ -739,6 +740,7 @@ export class GameRuntime {
       upgradeOptions: this.currentUpgradeOptions,
       rerollsRemaining: this.currentDraft?.rerollsRemaining ?? 0,
       fps: this.fps,
+      playerScreenPosition: { ...this.playerScreenPosition },
     };
   }
 
@@ -4161,6 +4163,10 @@ export class GameRuntime {
       worldY += (this.rng.next() - 0.5) * this.shakeStrength * 2 * falloff;
     }
     this.world.position.set(worldX, worldY);
+    this.playerScreenPosition = {
+      x: worldX + player.position.x * cameraScale,
+      y: worldY + player.position.y * cameraScale,
+    };
     this.positionBossWarning();
   }
 

@@ -191,6 +191,7 @@ export interface MoveVector {
 
 export interface MobileControlsProps {
   skills: SkillHudItem[];
+  playerScreenPosition?: MoveVector;
   dodgeCooldownRemaining: number;
   dodgeCooldownTotal: number;
   onMove: (vector: MoveVector) => void;
@@ -208,6 +209,7 @@ export interface GameUiProps {
   vitals: PlayerVitals;
   progress: CombatProgress;
   skills: SkillHudItem[];
+  playerScreenPosition?: MoveVector;
   dodgeCooldownRemaining: number;
   dodgeCooldownTotal: number;
   boss?: BossState | null;

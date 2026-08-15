@@ -101,6 +101,7 @@ export function GameUi(props: GameUiProps) {
           vitals={vitals}
           progress={progress}
           skills={skills}
+          {...(props.playerScreenPosition ? { playerScreenPosition: props.playerScreenPosition } : {})}
           dodgeCooldownRemaining={dodgeCooldownRemaining}
           dodgeCooldownTotal={dodgeCooldownTotal}
           {...(boss !== undefined ? { boss } : {})}
@@ -119,7 +120,7 @@ export function GameUi(props: GameUiProps) {
           onPause={props.onPause}
         />
       </div>
-      {screen === 'playing' && (
+      {(screen === 'playing' || screen === 'levelup') && (
         <MobileControls
           skills={skills}
           dodgeCooldownRemaining={dodgeCooldownRemaining}

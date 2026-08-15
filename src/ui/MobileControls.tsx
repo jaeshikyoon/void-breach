@@ -216,6 +216,7 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
 
 export function MobileControls({
   skills,
+  playerScreenPosition,
   dodgeCooldownRemaining,
   dodgeCooldownTotal,
   onMove,
@@ -327,6 +328,8 @@ export function MobileControls({
         data-skill-id={skillAim?.skillId ?? ''}
         aria-hidden="true"
         style={skillAim ? {
+          left: playerScreenPosition ? `${playerScreenPosition.x}px` : '50%',
+          top: playerScreenPosition ? `${playerScreenPosition.y}px` : '50%',
           width: `${Math.min(220, Math.max(52, skillAim.distance * 2.1))}px`,
           transform: `rotate(${Math.atan2(skillAim.vector.y, skillAim.vector.x)}rad)`,
         } : undefined}
