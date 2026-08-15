@@ -819,10 +819,13 @@
       flex-direction: column;
       gap: 4px;
       overflow: hidden;
+      position: relative;
+      padding-bottom: 52px;
     }
-    .ui-result__header { flex: 0 0 34px; }
+    .ui-result__header { flex: 0 0 38px; }
+    .ui-result__emblem { display: none; }
     .ui-result__kicker { font-size: 6px; }
-    .ui-result__header h1 { margin: 0; font-size: 27px; line-height: 1; }
+    .ui-result__header h1 { margin: 0; font-size: 25px; line-height: 1; letter-spacing: .06em; }
     .ui-result__stage-report { flex: 0 0 48px; min-height: 0; margin: 0; }
     .ui-result__stage-number,
     .ui-result__stars,
@@ -830,13 +833,16 @@
     .ui-result__stage-number strong { font-size: 20px; }
     .ui-result-star { width: 23px; height: 23px; }
     .ui-result__best small { font-size: 6px; }
-    .ui-result__star-guide { flex: 0 0 10px; margin: 0; font-size: 5px; }
+    .ui-result__star-guide { display: none; }
     .ui-result__stats { flex: 0 0 48px; min-height: 0; }
     .ui-result__stats > div { min-height: 0; }
     .ui-result__stats strong { font-size: 14px; line-height: 1; }
     .ui-result__stats span,
     .ui-result__stats small { font-size: 5px; }
-    .ui-result__loadout { flex: 0 0 58px; min-height: 0; gap: 5px; margin: 0; }
+    /* Loadout/mods are useful on desktop but not during a one-screen mobile
+       handoff; they are available again on the next stage/start screens. */
+    .ui-result__loadout,
+    .ui-result__boss-status { display: none; }
     .ui-result__loadout > section { min-height: 0; padding: 4px 8px; overflow: hidden; }
     .ui-result__loadout h2 { margin: 0 0 2px; font-size: 6px; }
     .ui-result__skills { gap: 4px; }
@@ -845,8 +851,7 @@
     .ui-result-skill span,
     .ui-result-skill strong,
     .ui-result__loadout li { font-size: 5px; line-height: 1.1; }
-    .ui-result__boss-status { flex: 0 0 28px; min-height: 0; margin: 0; padding: 3px 8px; font-size: 6px; }
-    .ui-result__actions { flex: 0 0 44px; min-height: 0; gap: 4px; margin: 0; }
+    .ui-result__actions { position: absolute; left: 0; right: 0; bottom: 5px; display: flex; flex: 0 0 44px; min-height: 0; gap: 4px; margin: 0; }
     .ui-result__actions > button:not(.ui-result__home),
     .ui-result__complete { min-width: 110px; min-height: 40px; font-size: 7px; }
     .ui-result__home { min-height: 40px; font-size: 7px; }
