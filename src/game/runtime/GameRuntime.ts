@@ -4095,19 +4095,21 @@ export class GameRuntime {
         const distance = this.virtualSkillAimDistance;
         const end = add(player.position, scale(aim, distance));
         const perp = { x: -aim.y, y: aim.x };
-        this.skillAimPreview.clear()
-          .moveTo(player.position.x, player.position.y)
-          .lineTo(end.x, end.y)
-          .stroke({ width: 5, color: 0x8deaff, alpha: 0.8 })
-          .circle(end.x, end.y, 22)
-          .fill({ color: 0x8deaff, alpha: 0.16 })
-          .circle(end.x, end.y, 22)
-          .stroke({ width: 2, color: 0xb9f5ff, alpha: 0.9 })
-          .moveTo(end.x, end.y)
-          .lineTo(end.x - aim.x * 30 + perp.x * 18, end.y - aim.y * 30 + perp.y * 18)
-          .lineTo(end.x - aim.x * 30 - perp.x * 18, end.y - aim.y * 30 - perp.y * 18)
-          .closePath()
-          .fill({ color: 0x8deaff, alpha: 0.22 });
+        // Keep this preview deliberately small and API-stable: it runs while
+        // a pointer is moving, so avoid complex chained path operations.
+        this.skillAimPreview.clear();
+        this.skillAimPreview.moveTo(player.position.x, player.position.y);
+        this.skillAimPreview.lineTo(end.x, end.y);
+        this.skillAimPreview.stroke({ width: 4, color: 0x8deaff, alpha: 0.82 });
+        this.skillAimPreview.circle(end.x, end.y, 22);
+        this.skillAimPreview.fill({ color: 0x8deaff, alpha: 0.14 });
+        this.skillAimPreview.circle(end.x, end.y, 22);
+        this.skillAimPreview.stroke({ width: 2, color: 0xb9f5ff, alpha: 0.9 });
+        this.skillAimPreview.moveTo(end.x, end.y);
+        this.skillAimPreview.lineTo(end.x - aim.x * 30 + perp.x * 18, end.y - aim.y * 30 + perp.y * 18);
+        this.skillAimPreview.lineTo(end.x - aim.x * 30 - perp.x * 18, end.y - aim.y * 30 - perp.y * 18);
+        this.skillAimPreview.lineTo(end.x, end.y);
+        this.skillAimPreview.fill({ color: 0x8deaff, alpha: 0.22 });
         this.skillAimPreview.visible = true;
       } else {
         this.skillAimPreview.visible = false;
