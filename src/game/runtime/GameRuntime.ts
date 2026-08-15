@@ -412,7 +412,6 @@ export class GameRuntime {
   private readonly backgroundLayer = new Container();
   private arenaSprite: Sprite | null = null;
   private arenaStageTint: Graphics | null = null;
-  private skillAimPreview: Graphics | null = null;
   private readonly underEffectLayer = new Container();
   private readonly entityLayer = new Container();
   private readonly projectileLayer = new Container();
@@ -853,10 +852,6 @@ export class GameRuntime {
       this.projectileLayer,
       this.overEffectLayer,
     );
-    this.skillAimPreview = new Graphics();
-    this.skillAimPreview.zIndex = 20_000;
-    this.skillAimPreview.visible = false;
-    this.overEffectLayer.addChild(this.skillAimPreview);
     app.stage.sortableChildren = true;
     this.world.zIndex = 0;
     this.screenLayer.zIndex = 100_000;
@@ -4089,32 +4084,6 @@ export class GameRuntime {
 
   private updateVisuals(delta: number): void {
     const player = this.player;
-    if (this.skillAimPreview) {
-      const aim = this.virtualSkillAimDirection;
-      if (player && aim) {
-        const distance = this.virtualSkillAimDistance;
-        const end = add(player.position, scale(aim, distance));
-        const perp = { x: -aim.y, y: aim.x };
-        // Keep this preview deliberately small and API-stable: it runs while
-        // a pointer is moving, so avoid complex chained path operations.
-        this.skillAimPreview.clear();
-        this.skillAimPreview.moveTo(player.position.x, player.position.y);
-        this.skillAimPreview.lineTo(end.x, end.y);
-        this.skillAimPreview.stroke({ width: 4, color: 0x8deaff, alpha: 0.82 });
-        this.skillAimPreview.circle(end.x, end.y, 22);
-        this.skillAimPreview.fill({ color: 0x8deaff, alpha: 0.14 });
-        this.skillAimPreview.circle(end.x, end.y, 22);
-        this.skillAimPreview.stroke({ width: 2, color: 0xb9f5ff, alpha: 0.9 });
-        this.skillAimPreview.moveTo(end.x, end.y);
-        this.skillAimPreview.lineTo(end.x - aim.x * 30 + perp.x * 18, end.y - aim.y * 30 + perp.y * 18);
-        this.skillAimPreview.lineTo(end.x - aim.x * 30 - perp.x * 18, end.y - aim.y * 30 - perp.y * 18);
-        this.skillAimPreview.lineTo(end.x, end.y);
-        this.skillAimPreview.fill({ color: 0x8deaff, alpha: 0.22 });
-        this.skillAimPreview.visible = true;
-      } else {
-        this.skillAimPreview.visible = false;
-      }
-    }
     if (player) {
       player.visual.root.position.set(player.position.x, player.position.y);
       player.visual.root.zIndex = player.position.y;
