@@ -106,7 +106,7 @@ interface MobileSkillButtonProps {
   index: number;
   skill?: SkillHudItem;
   onSkill: (id: ActiveSkillId) => void;
-  onSkillAim: (id: ActiveSkillId, vector: MoveVector | null) => void;
+  onSkillAim: (id: ActiveSkillId, vector: MoveVector | null, distance?: number) => void;
 }
 
 function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillButtonProps) {
@@ -132,23 +132,23 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
   const pointerRef = useRef<number | null>(null);
   const originRef = useRef<PointerOrigin | null>(null);
   const [aiming, setAiming] = useState(false);
-  const resolveSkillAim = (event: React.PointerEvent<HTMLButtonElement>) => {
+  const resolveSkillAim = (event: PointerEvent<HTMLButtonElement>) => {
     const origin = originRef.current;
     if (!origin) return null;
     const dx = event.clientX - origin.x;
     const dy = event.clientY - origin.y;
     const length = Math.hypot(dx, dy);
     if (length < SKILL_AIM_DRAG_THRESHOLD) return null;
-    return { x: dx / length, y: dy / length };
+    return { vector: { x: dx / length, y: dy / length }, distance: length };
   };
   const finish = (pointerId: number, event?: PointerEvent<HTMLButtonElement>) => {
     if (pointerRef.current !== pointerId) return;
-    const vector = event ? resolveSkillAim(event) : null;
+    const aim = event ? resolveSkillAim(event) : null;
     pointerRef.current = null;
     originRef.current = null;
     setAiming(false);
     if (!disabled) {
-      onSkillAim(skill.id, vector);
+      onSkillAim(skill.id, aim?.vector ?? null, aim?.distance);
       onSkill(skill.id);
     }
     onSkillAim(skill.id, null);
@@ -175,10 +175,10 @@ function MobileSkillButton({ index, skill, onSkill, onSkillAim }: MobileSkillBut
       onPointerMove={(event) => {
         if (pointerRef.current !== event.pointerId) return;
         event.preventDefault();
-        const vector = resolveSkillAim(event);
-        const nextAiming = vector !== null;
+        const aim = resolveSkillAim(event);
+        const nextAiming = aim !== null;
         setAiming(nextAiming);
-        onSkillAim(skill.id, vector);
+        onSkillAim(skill.id, aim?.vector ?? null, aim?.distance);
       }}
       onPointerUp={(event) => finish(event.pointerId, event)}
       onPointerCancel={(event) => finish(event.pointerId)}
@@ -215,10 +215,10 @@ export function MobileControls({
   const attackPointerRef = useRef<number | null>(null);
   const attackOriginRef = useRef<PointerOrigin | null>(null);
   const [attackAiming, setAttackAiming] = useState(false);
-  const [skillAim, setSkillAim] = useState<{ skillId: ActiveSkillId; vector: MoveVector } | null>(null);
-  const handleSkillAim = useCallback((skillId: ActiveSkillId, vector: MoveVector | null) => {
-    setSkillAim(vector ? { skillId, vector } : null);
-    onSkillAim(skillId, vector);
+  const [skillAim, setSkillAim] = useState<{ skillId: ActiveSkillId; vector: MoveVector; distance: number } | null>(null);
+  const handleSkillAim = useCallback((skillId: ActiveSkillId, vector: MoveVector | null, distance = 0) => {
+    setSkillAim(vector ? { skillId, vector, distance } : null);
+    onSkillAim(skillId, vector, distance);
   }, [onSkillAim]);
   const releaseCallbacksRef = useRef({ onMoveEnd, onAttackChange, onAttackAim });
   releaseCallbacksRef.current = { onMoveEnd, onAttackChange, onAttackAim };
@@ -310,8 +310,11 @@ export function MobileControls({
         data-testid="mobile-skill-aim-preview"
         data-skill-id={skillAim?.skillId ?? ''}
         aria-hidden="true"
-        style={skillAim ? { transform: `rotate(${Math.atan2(skillAim.vector.y, skillAim.vector.x)}rad)` } : undefined}
-      ><span /></div>
+        style={skillAim ? {
+          width: `${Math.min(220, Math.max(52, skillAim.distance * 2.1))}px`,
+          transform: `rotate(${Math.atan2(skillAim.vector.y, skillAim.vector.x)}rad)`,
+        } : undefined}
+      ><span /><b>{skillAim ? `${Math.round(skillAim.distance)}m` : ''}</b></div>
     </div>
   );
 }

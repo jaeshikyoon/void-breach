@@ -374,7 +374,7 @@ export function App() {
         onAttackAim={(direction) => runtimeRef.current?.setVirtualAimDirection(direction)}
         onDodge={() => runtimeRef.current?.triggerDash()}
         onSkill={(skillId) => runtimeRef.current?.triggerSkill(skillId)}
-        onSkillAim={(skillId, direction) => runtimeRef.current?.setVirtualSkillAimDirection(skillId, direction)}
+        onSkillAim={(skillId, direction, distance) => runtimeRef.current?.setVirtualSkillAimDirection(skillId, direction, distance)}
       />
     </div>
   );

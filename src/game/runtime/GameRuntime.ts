@@ -390,10 +390,11 @@ export class GameRuntime {
   private currentDraft: UpgradeDraft | null = null;
   private currentUpgradeOptions: readonly UpgradeCard[] = [];
   private pendingDash = false;
-  private pendingSkills: Array<{ skill: ActiveSkillId | number; aim: Vec2 | null }> = [];
+  private pendingSkills: Array<{ skill: ActiveSkillId | number; aim: Vec2 | null; distance: number }> = [];
   private virtualAttack = false;
   private virtualAimDirection: Vec2 | null = null;
   private virtualSkillAimDirection: Vec2 | null = null;
+  private virtualSkillAimDistance = 360;
   private lastAimDirection: Vec2 = { x: 1, y: 0 };
   private lastPointer: Vec2 = { x: 0, y: 0 };
   private pointerAimActive = false;
@@ -546,6 +547,7 @@ export class GameRuntime {
       this.virtualAttack = false;
       this.virtualAimDirection = null;
       this.virtualSkillAimDirection = null;
+      this.virtualSkillAimDistance = 360;
       this.input?.setVirtualAction('attack', false, 'runtime-ui');
       this.input?.setVirtualMovement({ x: 0, y: 0 });
       this.pendingDash = false;
@@ -588,12 +590,14 @@ export class GameRuntime {
     }
   }
 
-  setVirtualSkillAimDirection(_skillId: ActiveSkillId, direction: Vec2 | null): void {
+  setVirtualSkillAimDirection(_skillId: ActiveSkillId, direction: Vec2 | null, distance = 360): void {
     if (!direction || !Number.isFinite(direction.x) || !Number.isFinite(direction.y) || lengthSquared(direction) < 0.01) {
       this.virtualSkillAimDirection = null;
+      this.virtualSkillAimDistance = 360;
       return;
     }
     this.virtualSkillAimDirection = normalize(direction);
+    this.virtualSkillAimDistance = clamp(distance * 3.2, 72, 540);
   }
 
   unlockAudio(): Promise<boolean> {
@@ -611,7 +615,7 @@ export class GameRuntime {
   }
 
   triggerSkill(skill: ActiveSkillId | number): void {
-    this.pendingSkills.push({ skill, aim: this.virtualSkillAimDirection });
+    this.pendingSkills.push({ skill, aim: this.virtualSkillAimDirection, distance: this.virtualSkillAimDistance });
   }
 
   selectUpgrade(cardOrId: UpgradeCard | string): boolean {
@@ -922,6 +926,7 @@ export class GameRuntime {
     this.virtualAttack = false;
     this.virtualAimDirection = null;
     this.virtualSkillAimDirection = null;
+    this.virtualSkillAimDistance = 360;
     this.lastAimDirection = { x: 1, y: 0 };
     this.pointerAimActive = false;
     this.pauseInputGuard = 0;
@@ -1076,7 +1081,7 @@ export class GameRuntime {
     if (input.wasPressed('skill3')) this.useSkillSlot(2);
     for (const request of this.pendingSkills.splice(0)) {
       if (typeof request.skill === 'number') this.useSkillSlot(request.skill);
-      else this.activateSkill(request.skill, request.aim);
+      else this.activateSkill(request.skill, request.aim, request.distance);
     }
   }
 
@@ -3112,7 +3117,7 @@ export class GameRuntime {
     if (skillId) this.activateSkill(skillId);
   }
 
-  private activateSkill(skillId: ActiveSkillId, forcedAim: Vec2 | null = null): boolean {
+  private activateSkill(skillId: ActiveSkillId, forcedAim: Vec2 | null = null, forcedDistance = 360): boolean {
     const player = this.player;
     const level = this.build.activeSkills[skillId] ?? 0;
     if (!player || level <= 0 || (this.skillCooldowns[skillId] ?? 0) > 0) return false;
@@ -3121,7 +3126,7 @@ export class GameRuntime {
     if (!levelDefinition) return false;
     const skillAim = forcedAim ?? this.virtualSkillAimDirection;
     const worldPointer = skillAim
-      ? add(player.position, scale(skillAim, 360))
+      ? add(player.position, scale(skillAim, forcedAim ? forcedDistance : this.virtualSkillAimDistance))
       : this.virtualAimDirection
       ? add(player.position, scale(this.virtualAimDirection, 360))
       : this.pointerAimActive
